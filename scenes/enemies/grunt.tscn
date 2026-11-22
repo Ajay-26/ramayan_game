@@ -1,0 +1,134 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/characters/character_model.gd" id="9_model"]
+
+[ext_resource type="Script" path="res://scripts/enemies/grunt.gd" id="1_grunt"]
+
+[sub_resource type="CapsuleShape3D" id="shape_body"]
+radius = 0.45
+height = 1.9
+
+[sub_resource type="StandardMaterial3D" id="mat_skin"]
+albedo_color = Color(0.32, 0.13, 0.11, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="mat_bone"]
+albedo_color = Color(0.85, 0.8, 0.65, 1)
+roughness = 0.7
+
+[sub_resource type="StandardMaterial3D" id="mat_cloth"]
+albedo_color = Color(0.12, 0.1, 0.09, 1)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="mat_eye"]
+albedo_color = Color(1, 0.45, 0.1, 1)
+emission_enabled = true
+emission = Color(1, 0.4, 0.05, 1)
+emission_energy_multiplier = 0.8
+
+[sub_resource type="StandardMaterial3D" id="mat_wood"]
+albedo_color = Color(0.25, 0.15, 0.08, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="mat_iron"]
+albedo_color = Color(0.25, 0.25, 0.27, 1)
+metallic = 0.7
+roughness = 0.5
+
+[sub_resource type="CapsuleMesh" id="mesh_torso"]
+material = SubResource("mat_skin")
+radius = 0.42
+height = 1.25
+
+[sub_resource type="SphereMesh" id="mesh_head"]
+material = SubResource("mat_skin")
+radius = 0.25
+height = 0.48
+
+[sub_resource type="CylinderMesh" id="mesh_horn"]
+material = SubResource("mat_bone")
+top_radius = 0.0
+bottom_radius = 0.06
+height = 0.32
+
+[sub_resource type="SphereMesh" id="mesh_eye"]
+material = SubResource("mat_eye")
+radius = 0.022
+height = 0.044
+
+[sub_resource type="CylinderMesh" id="mesh_loincloth"]
+material = SubResource("mat_cloth")
+top_radius = 0.4
+bottom_radius = 0.48
+height = 0.5
+
+[sub_resource type="BoxMesh" id="mesh_club"]
+material = SubResource("mat_wood")
+size = Vector3(0.1, 0.1, 0.8)
+
+[sub_resource type="BoxMesh" id="mesh_club_head"]
+material = SubResource("mat_iron")
+size = Vector3(0.22, 0.22, 0.3)
+
+[node name="Grunt" type="CharacterBody3D" groups=["enemies"]]
+collision_layer = 4
+collision_mask = 7
+script = ExtResource("1_grunt")
+max_health = 50.0
+move_speed = 4.4
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.95, 0)
+shape = SubResource("shape_body")
+
+[node name="Visual" type="Node3D" parent="."]
+
+[node name="Model" type="Node3D" parent="Visual"]
+script = ExtResource("9_model")
+hair_tint = Color(0.05, 0.03, 0.03, 1)
+start_animation = "HeavyIdle"
+skin_tint = Color(1, 0.36, 0.28, 1)
+bare_skin = true
+upper_body = 1.16
+arm_mass = 1.1
+waist_cloth_color = Color(0.32, 0.2, 0.1, 1)
+waist_cloth_length = 0.45
+gold_belt = true
+
+
+[node name="Body" type="Node3D" parent="Visual"]
+position = Vector3(0, 0.95, 0)
+
+[node name="HornL" type="MeshInstance3D" parent="Visual/Body"]
+position = Vector3(-0.15, 1.05, -0.1)
+rotation_degrees = Vector3(0, 0, 28)
+mesh = SubResource("mesh_horn")
+
+[node name="HornR" type="MeshInstance3D" parent="Visual/Body"]
+position = Vector3(0.15, 1.05, -0.1)
+rotation_degrees = Vector3(0, 0, -28)
+mesh = SubResource("mesh_horn")
+
+[node name="EyeL" type="MeshInstance3D" parent="Visual/Body"]
+position = Vector3(-0.09, 0.84, -0.34)
+mesh = SubResource("mesh_eye")
+
+[node name="EyeR" type="MeshInstance3D" parent="Visual/Body"]
+position = Vector3(0.09, 0.84, -0.34)
+mesh = SubResource("mesh_eye")
+
+[node name="ClubPivot" type="Node3D" parent="Visual/Body"]
+position = Vector3(0.48, 0.35, 0)
+
+[node name="Club" type="MeshInstance3D" parent="Visual/Body/ClubPivot"]
+position = Vector3(0, 0, -0.4)
+mesh = SubResource("mesh_club")
+
+[node name="ClubHead" type="MeshInstance3D" parent="Visual/Body/ClubPivot"]
+position = Vector3(0, 0, -0.85)
+mesh = SubResource("mesh_club_head")
+
+[node name="NavAgent" type="NavigationAgent3D" parent="."]
+path_desired_distance = 0.75
+target_desired_distance = 1.0
+radius = 0.5

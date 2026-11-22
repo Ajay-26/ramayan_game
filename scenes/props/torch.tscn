@@ -1,0 +1,83 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/props/torch.gd" id="1_torch"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1"]
+albedo_color = Color(0.22, 0.14, 0.08, 1.0)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2"]
+albedo_color = Color(0.2, 0.2, 0.22, 1.0)
+roughness = 0.5
+metallic = 0.7
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3"]
+shading_mode = 0
+albedo_color = Color(1, 0.55, 0.15, 1.0)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4"]
+shading_mode = 0
+transparency = 1
+blend_mode = 1
+billboard_mode = 3
+vertex_color_use_as_albedo = true
+albedo_color = Color(1.6, 1.6, 1.6, 1.0)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_5"]
+material = SubResource("StandardMaterial3D_1")
+top_radius = 0.06
+bottom_radius = 0.09
+height = 2.3
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_6"]
+material = SubResource("StandardMaterial3D_2")
+top_radius = 0.22
+bottom_radius = 0.1
+height = 0.2
+
+[sub_resource type="SphereMesh" id="SphereMesh_7"]
+material = SubResource("StandardMaterial3D_3")
+radius = 0.16
+height = 0.42
+
+[sub_resource type="Gradient" id="Gradient_8"]
+offsets = PackedFloat32Array(0, 0.3, 1)
+colors = PackedColorArray(1, 0.8, 0.4, 1, 1, 0.4, 0.1, 0.9, 0.4, 0.05, 0, 0)
+
+[sub_resource type="QuadMesh" id="QuadMesh_9"]
+material = SubResource("StandardMaterial3D_4")
+size = Vector2(0.06, 0.06)
+
+[node name="Torch" type="Node3D"]
+script = ExtResource("1_torch")
+
+[node name="Pole" type="MeshInstance3D" parent="."]
+position = Vector3(0.0, 1.15, 0.0)
+mesh = SubResource("CylinderMesh_5")
+
+[node name="Bowl" type="MeshInstance3D" parent="."]
+position = Vector3(0.0, 2.3, 0.0)
+mesh = SubResource("CylinderMesh_6")
+
+[node name="Flame" type="MeshInstance3D" parent="."]
+position = Vector3(0.0, 2.5, 0.0)
+mesh = SubResource("SphereMesh_7")
+cast_shadow = 0
+
+[node name="Light" type="OmniLight3D" parent="."]
+position = Vector3(0.0, 2.7, 0.0)
+light_color = Color(1, 0.55, 0.22, 1.0)
+light_energy = 2.2
+omni_range = 9.0
+
+[node name="Embers" type="CPUParticles3D" parent="."]
+position = Vector3(0.0, 2.6, 0.0)
+mesh = SubResource("QuadMesh_9")
+amount = 10
+lifetime = 1.4
+direction = Vector3(0.0, 1.0, 0.0)
+spread = 25.0
+gravity = Vector3(0.2, 1.2, 0.0)
+initial_velocity_min = 0.3
+initial_velocity_max = 0.9
+color_ramp = SubResource("Gradient_8")

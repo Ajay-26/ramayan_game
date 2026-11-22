@@ -1,0 +1,56 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/props/gate.gd" id="1_gate"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1"]
+albedo_color = Color(0.2, 0.12, 0.07, 1.0)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2"]
+albedo_color = Color(1, 0.55, 0.15, 1.0)
+roughness = 0.9
+emission_enabled = true
+emission = Color(1, 0.45, 0.1, 1.0)
+emission_energy_multiplier = 1.5
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_3"]
+size = Vector3(6.4, 5.0, 0.6)
+
+[sub_resource type="BoxMesh" id="BoxMesh_4"]
+material = SubResource("StandardMaterial3D_1")
+size = Vector3(6.4, 5.0, 0.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_5"]
+material = SubResource("StandardMaterial3D_2")
+size = Vector3(0.18, 3.6, 0.55)
+
+[sub_resource type="BoxMesh" id="BoxMesh_6"]
+material = SubResource("StandardMaterial3D_2")
+size = Vector3(0.18, 3.6, 0.55)
+
+[sub_resource type="BoxMesh" id="BoxMesh_7"]
+material = SubResource("StandardMaterial3D_2")
+size = Vector3(0.18, 3.6, 0.55)
+
+[node name="Gate" type="StaticBody3D"]
+script = ExtResource("1_gate")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0.0, 2.5, 0.0)
+shape = SubResource("BoxShape3D_3")
+
+[node name="Doors" type="MeshInstance3D" parent="."]
+position = Vector3(0.0, 2.5, 0.0)
+mesh = SubResource("BoxMesh_4")
+
+[node name="Glyph0" type="MeshInstance3D" parent="."]
+position = Vector3(-2.2, 2.5, 0.0)
+mesh = SubResource("BoxMesh_5")
+
+[node name="Glyph1" type="MeshInstance3D" parent="."]
+position = Vector3(0.0, 2.5, 0.0)
+mesh = SubResource("BoxMesh_6")
+
+[node name="Glyph2" type="MeshInstance3D" parent="."]
+position = Vector3(2.2, 2.5, 0.0)
+mesh = SubResource("BoxMesh_7")

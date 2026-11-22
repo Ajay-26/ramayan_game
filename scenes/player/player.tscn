@@ -1,0 +1,122 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/player/player.gd" id="1_player"]
+[ext_resource type="PackedScene" path="res://scenes/combat/arrow.tscn" id="2_arrow"]
+[ext_resource type="PackedScene" path="res://scenes/combat/chakra.tscn" id="3_chakra"]
+[ext_resource type="Script" path="res://scripts/characters/character_model.gd" id="4_model"]
+
+[sub_resource type="CapsuleShape3D" id="shape_body"]
+radius = 0.4
+height = 1.8
+
+[sub_resource type="StandardMaterial3D" id="mat_skin"]
+albedo_color = Color(0.22, 0.38, 0.85, 1)
+roughness = 0.6
+
+[sub_resource type="StandardMaterial3D" id="mat_cloth"]
+albedo_color = Color(1, 0.8, 0.14, 1)
+roughness = 0.8
+
+[sub_resource type="StandardMaterial3D" id="mat_gold"]
+albedo_color = Color(1, 0.78, 0.3, 1)
+metallic = 0.85
+roughness = 0.3
+
+[sub_resource type="StandardMaterial3D" id="mat_blade"]
+albedo_color = Color(0.85, 0.88, 0.95, 1)
+metallic = 1.0
+roughness = 0.2
+emission_enabled = true
+emission = Color(0.6, 0.75, 1, 1)
+emission_energy_multiplier = 0.4
+
+[sub_resource type="StandardMaterial3D" id="mat_bow"]
+albedo_color = Color(0.45, 0.28, 0.12, 1)
+roughness = 0.7
+
+[sub_resource type="CapsuleMesh" id="mesh_torso"]
+material = SubResource("mat_skin")
+radius = 0.3
+height = 0.9
+
+[sub_resource type="CylinderMesh" id="mesh_dhoti"]
+material = SubResource("mat_cloth")
+top_radius = 0.17
+bottom_radius = 0.27
+height = 0.6
+
+[sub_resource type="SphereMesh" id="mesh_head"]
+material = SubResource("mat_skin")
+radius = 0.2
+height = 0.4
+
+[sub_resource type="CylinderMesh" id="mesh_crown"]
+material = SubResource("mat_gold")
+top_radius = 0.09
+bottom_radius = 0.16
+height = 0.22
+
+[sub_resource type="BoxMesh" id="mesh_ornament"]
+material = SubResource("mat_gold")
+size = Vector3(0.32, 0.1, 0.08)
+
+[sub_resource type="BoxMesh" id="mesh_blade"]
+material = SubResource("mat_blade")
+size = Vector3(0.055, 0.025, 0.95)
+
+[sub_resource type="BoxMesh" id="mesh_bow"]
+material = SubResource("mat_bow")
+size = Vector3(0.05, 1.3, 0.05)
+
+[node name="Player" type="CharacterBody3D" groups=["player"]]
+collision_layer = 2
+collision_mask = 5
+script = ExtResource("1_player")
+arrow_scene = ExtResource("2_arrow")
+chakra_scene = ExtResource("3_chakra")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.9, 0)
+shape = SubResource("shape_body")
+
+[node name="Visual" type="Node3D" parent="."]
+
+[node name="Model" type="Node3D" parent="Visual"]
+script = ExtResource("4_model")
+skin_tint = Color(0.94, 1.03, 1.03, 1)
+bare_skin = true
+upper_body = 1.14
+arm_mass = 1.08
+hair_tint = Color(0.04, 0.03, 0.04, 1)
+
+
+[node name="Body" type="Node3D" parent="Visual"]
+position = Vector3(0, 0.9, 0)
+
+[node name="Dhoti" type="MeshInstance3D" parent="Visual/Body"]
+mesh = SubResource("mesh_dhoti")
+
+[node name="Crown" type="MeshInstance3D" parent="Visual/Body"]
+position = Vector3(0, 1.07, 0)
+mesh = SubResource("mesh_crown")
+
+[node name="Bow" type="MeshInstance3D" parent="Visual/Body"]
+position = Vector3(0, 0.35, 0.3)
+rotation_degrees = Vector3(0, 0, 22)
+mesh = SubResource("mesh_bow")
+
+[node name="BladePivotR" type="Node3D" parent="Visual/Body"]
+position = Vector3(0.36, 0.3, 0)
+rotation_degrees = Vector3(-70, -15, 0)
+
+[node name="Blade" type="MeshInstance3D" parent="Visual/Body/BladePivotR"]
+position = Vector3(0, 0, -0.38)
+mesh = SubResource("mesh_blade")
+
+[node name="BladePivotL" type="Node3D" parent="Visual/Body"]
+position = Vector3(-0.36, 0.3, 0)
+rotation_degrees = Vector3(-70, 15, 0)
+
+[node name="Blade" type="MeshInstance3D" parent="Visual/Body/BladePivotL"]
+position = Vector3(0, 0, -0.38)
+mesh = SubResource("mesh_blade")

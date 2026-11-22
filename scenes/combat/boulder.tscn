@@ -1,0 +1,20 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/boulder.gd" id="1_boulder"]
+
+[sub_resource type="StandardMaterial3D" id="mat_rock"]
+albedo_color = Color(0.35, 0.3, 0.28, 1)
+roughness = 1.0
+
+[sub_resource type="SphereMesh" id="mesh_rock"]
+material = SubResource("mat_rock")
+radius = 0.7
+height = 1.2
+radial_segments = 8
+rings = 4
+
+[node name="Boulder" type="Node3D"]
+script = ExtResource("1_boulder")
+
+[node name="Rock" type="MeshInstance3D" parent="."]
+mesh = SubResource("mesh_rock")

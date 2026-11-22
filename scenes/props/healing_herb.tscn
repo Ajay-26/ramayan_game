@@ -1,0 +1,59 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/props/healing_herb.gd" id="1_healing_herb"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1"]
+albedo_color = Color(0.3, 1, 0.55, 1.0)
+roughness = 0.9
+emission_enabled = true
+emission = Color(0.2, 1, 0.45, 1.0)
+emission_energy_multiplier = 1.5
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_2"]
+radius = 0.9
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_3"]
+material = SubResource("StandardMaterial3D_1")
+top_radius = 0.0
+bottom_radius = 0.12
+height = 0.6
+
+[node name="HealingHerb" type="Area3D"]
+script = ExtResource("1_healing_herb")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0.0, 0.5, 0.0)
+shape = SubResource("SphereShape3D_2")
+
+[node name="Plant" type="Node3D" parent="."]
+position = Vector3(0.0, 0.3, 0.0)
+
+[node name="Leaf0" type="MeshInstance3D" parent="Plant"]
+position = Vector3(0.0, 0.3, 0.0)
+mesh = SubResource("CylinderMesh_3")
+rotation_degrees = Vector3(0.0, 0.0, 0.0)
+cast_shadow = 0
+
+[node name="Leaf1" type="MeshInstance3D" parent="Plant"]
+position = Vector3(0.15, 0.3, 0.05)
+mesh = SubResource("CylinderMesh_3")
+rotation_degrees = Vector3(25.0, 0.0, 25.0)
+cast_shadow = 0
+
+[node name="Leaf2" type="MeshInstance3D" parent="Plant"]
+position = Vector3(-0.12, 0.3, 0.1)
+mesh = SubResource("CylinderMesh_3")
+rotation_degrees = Vector3(-25.0, 0.0, -25.0)
+cast_shadow = 0
+
+[node name="Leaf3" type="MeshInstance3D" parent="Plant"]
+position = Vector3(0.02, 0.3, -0.15)
+mesh = SubResource("CylinderMesh_3")
+rotation_degrees = Vector3(20.0, 0.0, 20.0)
+cast_shadow = 0
+
+[node name="Light" type="OmniLight3D" parent="."]
+position = Vector3(0.0, 0.8, 0.0)
+light_color = Color(0.4, 1, 0.6, 1.0)
+light_energy = 1.0
+omni_range = 3.0

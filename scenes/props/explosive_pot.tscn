@@ -1,0 +1,52 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/props/explosive_pot.gd" id="1_explosive_pot"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1"]
+albedo_color = Color(0.55, 0.22, 0.12, 1.0)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2"]
+albedo_color = Color(1, 0.5, 0.1, 1.0)
+roughness = 0.9
+emission_enabled = true
+emission = Color(1, 0.45, 0.05, 1.0)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_3"]
+radius = 0.45
+
+[sub_resource type="SphereMesh" id="SphereMesh_4"]
+material = SubResource("StandardMaterial3D_1")
+radius = 0.45
+height = 0.85
+
+[sub_resource type="TorusMesh" id="TorusMesh_5"]
+material = SubResource("StandardMaterial3D_2")
+inner_radius = 0.4
+outer_radius = 0.47
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_6"]
+material = SubResource("StandardMaterial3D_1")
+top_radius = 0.16
+bottom_radius = 0.22
+height = 0.25
+
+[node name="ExplosivePot" type="StaticBody3D"]
+script = ExtResource("1_explosive_pot")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0.0, 0.45, 0.0)
+shape = SubResource("SphereShape3D_3")
+
+[node name="Pot" type="MeshInstance3D" parent="."]
+position = Vector3(0.0, 0.45, 0.0)
+mesh = SubResource("SphereMesh_4")
+
+[node name="Band" type="MeshInstance3D" parent="."]
+position = Vector3(0.0, 0.55, 0.0)
+mesh = SubResource("TorusMesh_5")
+
+[node name="Neck" type="MeshInstance3D" parent="."]
+position = Vector3(0.0, 0.95, 0.0)
+mesh = SubResource("CylinderMesh_6")

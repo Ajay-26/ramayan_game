@@ -1,0 +1,84 @@
+[gd_scene format=3]
+
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1"]
+albedo_color = Color(0.95, 0.5, 0.12, 1.0)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2"]
+albedo_color = Color(0.62, 0.45, 0.32, 1.0)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3"]
+albedo_color = Color(0.92, 0.92, 0.9, 1.0)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4"]
+albedo_color = Color(0.35, 0.15, 0.08, 1.0)
+roughness = 0.9
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_5"]
+radius = 0.7
+height = 1.2
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_6"]
+material = SubResource("StandardMaterial3D_1")
+top_radius = 0.5
+bottom_radius = 0.75
+height = 0.45
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_7"]
+material = SubResource("StandardMaterial3D_1")
+radius = 0.3
+height = 0.9
+
+[sub_resource type="SphereMesh" id="SphereMesh_8"]
+material = SubResource("StandardMaterial3D_2")
+radius = 0.19
+height = 0.38
+
+[sub_resource type="SphereMesh" id="SphereMesh_9"]
+material = SubResource("StandardMaterial3D_3")
+radius = 0.16
+height = 0.42
+
+[sub_resource type="SphereMesh" id="SphereMesh_10"]
+material = SubResource("StandardMaterial3D_3")
+radius = 0.11
+height = 0.22
+
+[sub_resource type="TorusMesh" id="TorusMesh_11"]
+material = SubResource("StandardMaterial3D_4")
+inner_radius = 0.2
+outer_radius = 0.25
+
+[node name="Vishwamitra" type="StaticBody3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0.0, 0.6, 0.0)
+shape = SubResource("CylinderShape3D_5")
+
+[node name="Lap" type="MeshInstance3D" parent="."]
+position = Vector3(0.0, 0.22, 0.0)
+mesh = SubResource("CylinderMesh_6")
+
+[node name="Torso" type="MeshInstance3D" parent="."]
+position = Vector3(0.0, 0.8, 0.0)
+mesh = SubResource("CapsuleMesh_7")
+
+[node name="Head" type="MeshInstance3D" parent="."]
+position = Vector3(0.0, 1.4, 0.0)
+mesh = SubResource("SphereMesh_8")
+
+[node name="Beard" type="MeshInstance3D" parent="."]
+position = Vector3(0.0, 1.25, -0.1)
+mesh = SubResource("SphereMesh_9")
+
+[node name="Bun" type="MeshInstance3D" parent="."]
+position = Vector3(0.0, 1.62, 0.04)
+mesh = SubResource("SphereMesh_10")
+
+[node name="Beads" type="MeshInstance3D" parent="."]
+position = Vector3(0.0, 1.05, -0.05)
+mesh = SubResource("TorusMesh_11")
+rotation_degrees = Vector3(70.0, 0.0, 0.0)

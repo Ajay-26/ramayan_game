@@ -1,0 +1,50 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scripts/combat/chakra.gd" id="1_chakra"]
+
+[sub_resource type="StandardMaterial3D" id="mat_gold"]
+albedo_color = Color(1, 0.8, 0.3, 1)
+metallic = 0.9
+roughness = 0.25
+emission_enabled = true
+emission = Color(1, 0.7, 0.2, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="CylinderMesh" id="mesh_disc"]
+material = SubResource("mat_gold")
+top_radius = 0.32
+bottom_radius = 0.32
+height = 0.05
+radial_segments = 24
+
+[sub_resource type="BoxMesh" id="mesh_spike"]
+material = SubResource("mat_gold")
+size = Vector3(0.9, 0.04, 0.08)
+
+[node name="Chakra" type="Node3D"]
+script = ExtResource("1_chakra")
+
+[node name="Disc" type="Node3D" parent="."]
+
+[node name="Ring" type="MeshInstance3D" parent="Disc"]
+cast_shadow = 0
+mesh = SubResource("mesh_disc")
+
+[node name="Spike1" type="MeshInstance3D" parent="Disc"]
+cast_shadow = 0
+mesh = SubResource("mesh_spike")
+
+[node name="Spike2" type="MeshInstance3D" parent="Disc"]
+transform = Transform3D(0.5, 0, 0.866, 0, 1, 0, -0.866, 0, 0.5, 0, 0, 0)
+cast_shadow = 0
+mesh = SubResource("mesh_spike")
+
+[node name="Spike3" type="MeshInstance3D" parent="Disc"]
+transform = Transform3D(-0.5, 0, 0.866, 0, 1, 0, -0.866, 0, -0.5, 0, 0, 0)
+cast_shadow = 0
+mesh = SubResource("mesh_spike")
+
+[node name="Light" type="OmniLight3D" parent="."]
+light_color = Color(1, 0.75, 0.3, 1)
+light_energy = 1.5
+omni_range = 4.0

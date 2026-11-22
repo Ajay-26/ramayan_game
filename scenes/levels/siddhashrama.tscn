@@ -1,0 +1,2394 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://scenes/props/torch.tscn" id="1_torch"]
+[ext_resource type="PackedScene" path="res://scenes/props/explosive_pot.tscn" id="2_explosive_pot"]
+[ext_resource type="PackedScene" path="res://scenes/props/bell.tscn" id="3_bell"]
+[ext_resource type="PackedScene" path="res://scenes/props/gate.tscn" id="4_gate"]
+[ext_resource type="PackedScene" path="res://scenes/props/healing_herb.tscn" id="5_healing_herb"]
+[ext_resource type="PackedScene" path="res://scenes/props/chakra_pickup.tscn" id="6_chakra_pickup"]
+[ext_resource type="PackedScene" path="res://scenes/props/yagna_altar.tscn" id="7_yagna_altar"]
+[ext_resource type="PackedScene" path="res://scenes/props/vishwamitra.tscn" id="8_vishwamitra"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/grunt.tscn" id="9_grunt"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/archer.tscn" id="10_archer"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/brute.tscn" id="11_brute"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/tataka.tscn" id="12_tataka"]
+[ext_resource type="PackedScene" path="res://scenes/player/player.tscn" id="13_player"]
+[ext_resource type="Script" path="res://scripts/levels/level.gd" id="14_level"]
+[ext_resource type="Script" path="res://scripts/levels/section.gd" id="15_section"]
+[ext_resource type="Script" path="res://scripts/levels/encounter.gd" id="16_encounter"]
+[ext_resource type="Script" path="res://scripts/levels/spawn_point.gd" id="17_spawn_point"]
+[ext_resource type="Script" path="res://scripts/levels/caption_trigger.gd" id="18_caption_trigger"]
+[ext_resource type="Script" path="res://scripts/props/bell_puzzle.gd" id="19_bell_puzzle"]
+[ext_resource type="Script" path="res://scripts/levels/boss_encounter.gd" id="20_boss_encounter"]
+[ext_resource type="Script" path="res://scripts/camera/camera_rig.gd" id="21_camera_rig"]
+[ext_resource type="Script" path="res://scripts/ui/hud.gd" id="22_hud"]
+[ext_resource type="NavigationMesh" path="res://scenes/levels/siddhashrama_navmesh.tres" id="23_siddhashrama_navmesh"]
+[ext_resource type="Script" path="res://scripts/world/terrain_patch.gd" id="24_terrain_patch"]
+[ext_resource type="Script" path="res://scripts/world/forest_scatter.gd" id="25_forest_scatter"]
+[ext_resource type="Script" path="res://scripts/world/battlement.gd" id="26_battlement"]
+[ext_resource type="Script" path="res://scripts/world/rock.gd" id="27_rock"]
+[ext_resource type="Shader" path="res://shaders/stone_blocks.gdshader" id="28_stone_blocks"]
+[ext_resource type="Shader" path="res://shaders/rock.gdshader" id="29_rock"]
+[ext_resource type="Shader" path="res://shaders/bark.gdshader" id="30_bark"]
+
+[sub_resource type="Gradient" id="Gradient_1"]
+colors = PackedColorArray(0.55, 0.55, 0.55, 1, 1, 1, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_2"]
+frequency = 0.04
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_3"]
+seamless = true
+color_ramp = SubResource("Gradient_1")
+noise = SubResource("FastNoiseLite_2")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4"]
+albedo_color = Color(0.24, 0.2, 0.15, 1.0)
+albedo_texture = SubResource("NoiseTexture2D_3")
+roughness = 1.0
+uv1_scale = Vector3(0.12, 0.12, 0.12)
+uv1_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_5"]
+albedo_color = Color(0.28, 0.27, 0.27, 1.0)
+albedo_texture = SubResource("NoiseTexture2D_3")
+roughness = 0.95
+uv1_scale = Vector3(0.15, 0.15, 0.15)
+uv1_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6"]
+albedo_color = Color(0.48, 0.45, 0.43, 1.0)
+albedo_texture = SubResource("NoiseTexture2D_3")
+roughness = 0.95
+uv1_scale = Vector3(0.3, 0.3, 0.3)
+uv1_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7"]
+albedo_color = Color(0.33, 0.3, 0.29, 1.0)
+albedo_texture = SubResource("NoiseTexture2D_3")
+roughness = 0.95
+uv1_scale = Vector3(0.3, 0.3, 0.3)
+uv1_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8"]
+albedo_color = Color(0.2, 0.13, 0.09, 1.0)
+albedo_texture = SubResource("NoiseTexture2D_3")
+roughness = 0.95
+uv1_scale = Vector3(0.5, 0.5, 0.5)
+uv1_triplanar = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_9"]
+albedo_color = Color(0.07, 0.14, 0.09, 1.0)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_10"]
+albedo_color = Color(0.32, 0.18, 0.12, 1.0)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_11"]
+albedo_color = Color(0.3, 0.2, 0.12, 1.0)
+albedo_texture = SubResource("NoiseTexture2D_3")
+roughness = 0.95
+uv1_scale = Vector3(0.5, 0.5, 0.5)
+uv1_triplanar = true
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_12"]
+shader = ExtResource("28_stone_blocks")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_13"]
+shader = ExtResource("29_rock")
+shader_parameter/moss_amount = 0.35
+shader_parameter/scale = 0.35
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_14"]
+shader = ExtResource("29_rock")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_15"]
+shader = ExtResource("30_bark")
+shader_parameter/moss_amount = 0.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_16"]
+albedo_color = Color(0.42, 0.3, 0.2, 1.0)
+roughness = 1.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_17"]
+albedo_color = Color(0.3, 0.15, 0.1, 1.0)
+roughness = 0.95
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_18"]
+albedo_color = Color(0.55, 0.06, 0.06, 1.0)
+roughness = 0.9
+cull_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_19"]
+albedo_color = Color(1.0, 0.55, 0.1, 1.0)
+roughness = 0.9
+cull_mode = 2
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_20"]
+sky_top_color = Color(0.09, 0.12, 0.3, 1.0)
+sky_horizon_color = Color(0.72, 0.42, 0.5, 1.0)
+ground_bottom_color = Color(0.05, 0.06, 0.07, 1.0)
+ground_horizon_color = Color(0.35, 0.3, 0.4, 1.0)
+sun_angle_max = 10.0
+sun_curve = 0.1
+
+[sub_resource type="Sky" id="Sky_21"]
+sky_material = SubResource("ProceduralSkyMaterial_20")
+
+[sub_resource type="Environment" id="Environment_22"]
+background_mode = 2
+sky = SubResource("Sky_21")
+ambient_light_source = 2
+ambient_light_color = Color(0.48, 0.53, 0.68, 1.0)
+ambient_light_energy = 1.0
+tonemap_mode = 3
+tonemap_exposure = 1.1
+glow_enabled = true
+glow_intensity = 0.6
+glow_bloom = 0.04
+fog_enabled = true
+fog_light_color = Color(0.3, 0.34, 0.48, 1.0)
+fog_density = 0.014
+fog_sky_affect = 0.25
+adjustment_enabled = true
+adjustment_contrast = 1.08
+adjustment_saturation = 1.05
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_23"]
+size = Vector3(2.0, 8.0, 44.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_24"]
+size = Vector3(2.0, 8.0, 44.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_25"]
+size = Vector3(18.0, 8.0, 2.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_26"]
+size = Vector3(14.0, 3.0, 3.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_27"]
+size = Vector3(14.0, 3.0, 3.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_28"]
+size = Vector3(2.0, 8.0, 40.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_29"]
+size = Vector3(2.0, 8.0, 40.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_30"]
+size = Vector3(9.0, 8.0, 2.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_31"]
+size = Vector3(9.0, 8.0, 2.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_32"]
+size = Vector3(32.0, 3.0, 3.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_33"]
+size = Vector3(30.0, 3.0, 3.0)
+
+[sub_resource type="PrismMesh" id="PrismMesh_34"]
+size = Vector3(3.2, 2.3, 4.4)
+material = SubResource("StandardMaterial3D_16")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_35"]
+size = Vector3(2.6, 1.8, 4.4)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_36"]
+top_radius = 0.05
+bottom_radius = 0.06
+height = 2.6
+material = SubResource("ShaderMaterial_15")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_37"]
+top_radius = 0.05
+bottom_radius = 0.06
+height = 2.6
+material = SubResource("ShaderMaterial_15")
+
+[sub_resource type="PrismMesh" id="PrismMesh_38"]
+size = Vector3(3.2, 2.3, 4.4)
+material = SubResource("StandardMaterial3D_16")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_39"]
+size = Vector3(2.6, 1.8, 4.4)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_40"]
+top_radius = 0.05
+bottom_radius = 0.06
+height = 2.6
+material = SubResource("ShaderMaterial_15")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_41"]
+top_radius = 0.05
+bottom_radius = 0.06
+height = 2.6
+material = SubResource("ShaderMaterial_15")
+
+[sub_resource type="PrismMesh" id="PrismMesh_42"]
+size = Vector3(3.2, 2.3, 4.4)
+material = SubResource("StandardMaterial3D_16")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_43"]
+size = Vector3(2.6, 1.8, 4.4)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_44"]
+top_radius = 0.05
+bottom_radius = 0.06
+height = 2.6
+material = SubResource("ShaderMaterial_15")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_45"]
+top_radius = 0.05
+bottom_radius = 0.06
+height = 2.6
+material = SubResource("ShaderMaterial_15")
+
+[sub_resource type="PrismMesh" id="PrismMesh_46"]
+size = Vector3(3.2, 2.3, 4.4)
+material = SubResource("StandardMaterial3D_16")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_47"]
+size = Vector3(2.6, 1.8, 4.4)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_48"]
+top_radius = 0.05
+bottom_radius = 0.06
+height = 2.6
+material = SubResource("ShaderMaterial_15")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_49"]
+top_radius = 0.05
+bottom_radius = 0.06
+height = 2.6
+material = SubResource("ShaderMaterial_15")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_50"]
+size = Vector3(32.0, 3.0, 3.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_51"]
+size = Vector3(30.0, 3.0, 4.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_52"]
+size = Vector3(28.0, 3.0, 3.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_53"]
+size = Vector3(14.0, 3.0, 3.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_54"]
+size = Vector3(14.0, 3.0, 4.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_55"]
+size = Vector3(2.0, 8.0, 40.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_56"]
+size = Vector3(2.0, 8.0, 40.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_57"]
+size = Vector3(28.0, 3.0, 3.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_58"]
+size = Vector3(28.0, 3.0, 3.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_59"]
+size = Vector3(6.0, 3.0, 6.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_60"]
+size = Vector3(44.0, 3.0, 3.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_61"]
+size = Vector3(40.0, 3.0, 3.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_62"]
+size = Vector3(40.0, 3.0, 4.0)
+
+[node name="Siddhashrama" type="Node3D"]
+script = ExtResource("14_level")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_22")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-30.0, -35.0, 0.0)
+light_color = Color(1.0, 0.78, 0.74, 1.0)
+light_energy = 1.05
+shadow_enabled = true
+shadow_opacity = 0.75
+shadow_blur = 1.5
+directional_shadow_max_distance = 45.0
+
+[node name="NavRegion" type="NavigationRegion3D" parent="."]
+navigation_mesh = ExtResource("23_siddhashrama_navmesh")
+
+[node name="Geometry" type="Node3D" parent="NavRegion"]
+
+[node name="Sections" type="Node3D" parent="."]
+
+[node name="TerrainL1" type="Node3D" parent="NavRegion/Geometry"]
+script = ExtResource("24_terrain_patch")
+x_range = Vector2(-30.5, 0)
+z_range = Vector2(8, -36)
+play_half_width = 6.5
+path_half_width = 1.8
+inner_amplitude = 0.45
+hill_height = 5.0
+
+[node name="Forest" type="Node3D" parent="NavRegion/Geometry/TerrainL1"]
+script = ExtResource("25_forest_scatter")
+seed = 11
+edge_trees = 55
+inner_trees = 0
+bushes = 35
+grass = 450
+edge_min_x = -1.0
+keep_clear = Array[Rect2]([Rect2(-3, -36, 6, 44)])
+
+[node name="TerrainR2" type="Node3D" parent="NavRegion/Geometry"]
+script = ExtResource("24_terrain_patch")
+x_range = Vector2(0, 30.5)
+z_range = Vector2(8, -36)
+play_half_width = 6.5
+path_half_width = 1.8
+inner_amplitude = 0.45
+hill_height = 5.0
+
+[node name="Forest" type="Node3D" parent="NavRegion/Geometry/TerrainR2"]
+script = ExtResource("25_forest_scatter")
+seed = 12
+edge_trees = 55
+inner_trees = 0
+bushes = 35
+grass = 450
+edge_min_x = -1.0
+keep_clear = Array[Rect2]([Rect2(-3, -36, 6, 44)])
+
+[node name="Boundary3" type="StaticBody3D" parent="NavRegion/Geometry"]
+position = Vector3(-8.0, 4.0, -14.0)
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="NavRegion/Geometry/Boundary3"]
+shape = SubResource("BoxShape3D_23")
+
+[node name="Boundary4" type="StaticBody3D" parent="NavRegion/Geometry"]
+position = Vector3(8.0, 4.0, -14.0)
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="NavRegion/Geometry/Boundary4"]
+shape = SubResource("BoxShape3D_24")
+
+[node name="Boundary5" type="StaticBody3D" parent="NavRegion/Geometry"]
+position = Vector3(0.0, 4.0, 7.0)
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="NavRegion/Geometry/Boundary5"]
+shape = SubResource("BoxShape3D_25")
+
+[node name="Boulder6" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(-4.5, 0.0, -20.0)
+rotation_degrees = Vector3(0.0, 25.0, 0.0)
+script = ExtResource("27_rock")
+size = Vector3(1.3, 0.9, 1.1)
+rock_seed = 9
+
+[node name="Boulder7" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(4.8, 0.0, -11.0)
+rotation_degrees = Vector3(0.0, 70.0, 0.0)
+script = ExtResource("27_rock")
+size = Vector3(1.0, 0.7, 1.2)
+rock_seed = 10
+
+[node name="S0" type="Node3D" parent="Sections"]
+script = ExtResource("15_section")
+index = 0
+title = "Siddhashrama Forest"
+
+[node name="Spawn" type="Marker3D" parent="Sections/S0"]
+position = Vector3(0.0, 0.0, -6.0)
+
+[node name="CheckpointArea" type="Area3D" parent="Sections/S0"]
+position = Vector3(0.0, 1.5, -6.0)
+
+[node name="Shape" type="CollisionShape3D" parent="Sections/S0/CheckpointArea"]
+shape = SubResource("BoxShape3D_26")
+
+[node name="Intro" type="Area3D" parent="Sections/S0"]
+position = Vector3(0.0, 1.5, -9.0)
+script = ExtResource("18_caption_trigger")
+speaker = "Vishwamitra"
+lines = PackedStringArray("Stay close, Rama. Rakshasas prowl these woods after dark.", "Where you can, move unseen. Press C to sneak.", "Come upon them from behind, and your blades will end them silently.")
+
+[node name="Shape" type="CollisionShape3D" parent="Sections/S0/Intro"]
+shape = SubResource("BoxShape3D_27")
+
+[node name="Torch8" parent="Sections/S0" instance=ExtResource("1_torch")]
+position = Vector3(-5.0, 0.0, -16.0)
+
+[node name="Torch9" parent="Sections/S0" instance=ExtResource("1_torch")]
+position = Vector3(5.0, 0.0, -29.0)
+
+[node name="TerrainL10" type="Node3D" parent="NavRegion/Geometry"]
+script = ExtResource("24_terrain_patch")
+x_range = Vector2(-39, 0)
+z_range = Vector2(-36, -80)
+play_half_width = 15.0
+path_half_width = 2.2
+inner_amplitude = 0.45
+hill_height = 5.0
+mounds = Array[Vector3]([Vector3(-9.0, -55.0, 1.3), Vector3(10.0, -49.0, 1.0), Vector3(4.0, -70.0, 0.7)])
+
+[node name="Forest" type="Node3D" parent="NavRegion/Geometry/TerrainL10"]
+script = ExtResource("25_forest_scatter")
+seed = 21
+edge_trees = 50
+inner_trees = 4
+bushes = 45
+grass = 550
+edge_min_x = -1.0
+keep_clear = Array[Rect2]([Rect2(-4, -80, 8, 46), Rect2(-11.5, -64.5, 4, 5), Rect2(8, -71, 4, 6), Rect2(-9, -52, 18, 4)])
+
+[node name="TerrainR11" type="Node3D" parent="NavRegion/Geometry"]
+script = ExtResource("24_terrain_patch")
+x_range = Vector2(0, 39)
+z_range = Vector2(-36, -80)
+play_half_width = 15.0
+path_half_width = 2.2
+inner_amplitude = 0.45
+hill_height = 5.0
+mounds = Array[Vector3]([Vector3(-9.0, -55.0, 1.3), Vector3(10.0, -49.0, 1.0), Vector3(4.0, -70.0, 0.7)])
+
+[node name="Forest" type="Node3D" parent="NavRegion/Geometry/TerrainR11"]
+script = ExtResource("25_forest_scatter")
+seed = 22
+edge_trees = 50
+inner_trees = 4
+bushes = 45
+grass = 550
+edge_min_x = -1.0
+keep_clear = Array[Rect2]([Rect2(-4, -80, 8, 46), Rect2(-11.5, -64.5, 4, 5), Rect2(8, -71, 4, 6), Rect2(-9, -52, 18, 4)])
+
+[node name="Boundary12" type="StaticBody3D" parent="NavRegion/Geometry"]
+position = Vector3(-17.0, 4.0, -56.0)
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="NavRegion/Geometry/Boundary12"]
+shape = SubResource("BoxShape3D_28")
+
+[node name="Boundary13" type="StaticBody3D" parent="NavRegion/Geometry"]
+position = Vector3(17.0, 4.0, -56.0)
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="NavRegion/Geometry/Boundary13"]
+shape = SubResource("BoxShape3D_29")
+
+[node name="Boundary14" type="StaticBody3D" parent="NavRegion/Geometry"]
+position = Vector3(-12.5, 4.0, -36.0)
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="NavRegion/Geometry/Boundary14"]
+shape = SubResource("BoxShape3D_30")
+
+[node name="Boundary15" type="StaticBody3D" parent="NavRegion/Geometry"]
+position = Vector3(12.5, 4.0, -36.0)
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="NavRegion/Geometry/Boundary15"]
+shape = SubResource("BoxShape3D_31")
+
+[node name="Battlement16" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(-10.6, 0.0, -76.0)
+script = ExtResource("26_battlement")
+kind = 1
+length = 14.8
+height = 5.0
+thickness = 2.0
+
+[node name="Battlement17" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(10.6, 0.0, -76.0)
+script = ExtResource("26_battlement")
+kind = 1
+length = 14.8
+height = 5.0
+thickness = 2.0
+
+[node name="GateTower18" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(-4.4, 3.5, -76.0)
+use_collision = true
+radius = 1.5
+height = 7.0
+sides = 10
+material = SubResource("ShaderMaterial_12")
+
+[node name="GateRoof19" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(-4.4, 8.1, -76.0)
+use_collision = false
+radius = 2.0
+height = 2.2
+sides = 10
+material = SubResource("StandardMaterial3D_17")
+cone = true
+
+[node name="GateTower20" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(4.4, 3.5, -76.0)
+use_collision = true
+radius = 1.5
+height = 7.0
+sides = 10
+material = SubResource("ShaderMaterial_12")
+
+[node name="GateRoof21" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(4.4, 8.1, -76.0)
+use_collision = false
+radius = 2.0
+height = 2.2
+sides = 10
+material = SubResource("StandardMaterial3D_17")
+cone = true
+
+[node name="Battlement22" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(-4.0, 0.0, -80.0)
+script = ExtResource("26_battlement")
+kind = 1
+length = 8.0
+height = 4.5
+thickness = 1.6
+rotation_degrees = Vector3(0.0, 90.0, 0.0)
+
+[node name="Battlement23" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(4.0, 0.0, -80.0)
+script = ExtResource("26_battlement")
+kind = 1
+length = 8.0
+height = 4.5
+thickness = 1.6
+rotation_degrees = Vector3(0.0, 90.0, 0.0)
+
+[node name="Boulder24" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(-6.0, 0.0, -46.0)
+rotation_degrees = Vector3(0.0, 10.0, 0.0)
+script = ExtResource("27_rock")
+size = Vector3(1.8, 1.3, 1.4)
+rock_seed = 27
+
+[node name="Boulder25" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(5.0, 0.0, -53.0)
+rotation_degrees = Vector3(0.0, -15.0, 0.0)
+script = ExtResource("27_rock")
+size = Vector3(2.2, 1.5, 1.3)
+rock_seed = 28
+
+[node name="Boulder26" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(-3.0, 0.0, -64.0)
+rotation_degrees = Vector3(0.0, 30.0, 0.0)
+script = ExtResource("27_rock")
+size = Vector3(1.5, 1.2, 1.8)
+rock_seed = 29
+
+[node name="Boulder27" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(7.0, 0.0, -65.0)
+rotation_degrees = Vector3(0.0, 0.0, 0.0)
+script = ExtResource("27_rock")
+size = Vector3(1.3, 1.2, 1.3)
+rock_seed = 30
+
+[node name="Boulder28" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(-13.0, 0.0, -46.0)
+rotation_degrees = Vector3(0.0, 5.0, 0.0)
+script = ExtResource("27_rock")
+size = Vector3(1.8, 1.8, 2.2)
+rock_seed = 31
+
+[node name="Boulder29" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(12.0, 0.0, -57.0)
+rotation_degrees = Vector3(0.0, 40.0, 0.0)
+script = ExtResource("27_rock")
+size = Vector3(1.8, 1.5, 1.8)
+rock_seed = 32
+
+[node name="S1" type="Node3D" parent="Sections"]
+script = ExtResource("15_section")
+index = 1
+title = "The Sentries"
+exit_gate_path = NodePath("ExitGate")
+
+[node name="Spawn" type="Marker3D" parent="Sections/S1"]
+position = Vector3(0.0, 0.0, -38.0)
+
+[node name="CheckpointArea" type="Area3D" parent="Sections/S1"]
+position = Vector3(0.0, 1.5, -38.0)
+
+[node name="Shape" type="CollisionShape3D" parent="Sections/S1/CheckpointArea"]
+shape = SubResource("BoxShape3D_32")
+
+[node name="ExitGate" parent="Sections/S1" instance=ExtResource("4_gate")]
+position = Vector3(0.0, 0.0, -76.0)
+
+[node name="Stealth" type="Area3D" parent="Sections/S1"]
+position = Vector3(0.0, 1.5, -40.0)
+script = ExtResource("18_caption_trigger")
+speaker = "Vishwamitra"
+lines = PackedStringArray("Three sentries guard the path. Take them unseen if you can.", "Stay out of their sight. Get behind one and strike: Left click or F.")
+
+[node name="Shape" type="CollisionShape3D" parent="Sections/S1/Stealth"]
+shape = SubResource("BoxShape3D_33")
+
+[node name="Sentries" type="Node3D" parent="Sections/S1"]
+script = ExtResource("16_encounter")
+alert_all_on_start = false
+
+[node name="Placed" type="Node3D" parent="Sections/S1/Sentries"]
+
+[node name="Grunt30" parent="Sections/S1/Sentries/Placed" instance=ExtResource("9_grunt")]
+position = Vector3(0.0, 0.0, -50.0)
+start_aware = false
+start_yaw_degrees = 0.0
+patrol_points = Array[Vector3]([Vector3(-7.0, 0.0, 0.0), Vector3(7.0, 0.0, 0.0)])
+
+[node name="Grunt31" parent="Sections/S1/Sentries/Placed" instance=ExtResource("9_grunt")]
+position = Vector3(-10.0, 0.0, -62.0)
+start_aware = false
+start_yaw_degrees = 0.0
+
+[node name="Grunt32" parent="Sections/S1/Sentries/Placed" instance=ExtResource("9_grunt")]
+position = Vector3(10.0, 0.0, -68.0)
+start_aware = false
+start_yaw_degrees = 20.0
+
+[node name="Torch33" parent="Sections/S1" instance=ExtResource("1_torch")]
+position = Vector3(-12.0, 0.0, -60.0)
+
+[node name="Torch34" parent="Sections/S1" instance=ExtResource("1_torch")]
+position = Vector3(12.0, 0.0, -66.0)
+
+[node name="Torch35" parent="Sections/S1" instance=ExtResource("1_torch")]
+position = Vector3(0.0, 0.0, -73.0)
+
+[node name="Herb36" parent="Sections/S1" instance=ExtResource("5_healing_herb")]
+position = Vector3(14.0, 0.0, -44.0)
+
+[node name="TerrainL37" type="Node3D" parent="NavRegion/Geometry"]
+script = ExtResource("24_terrain_patch")
+x_range = Vector2(-41.5, 0)
+z_range = Vector2(-80, -128)
+play_half_width = 17.5
+path_half_width = 2.2
+inner_amplitude = 0.25
+hill_height = 5.0
+
+[node name="Forest" type="Node3D" parent="NavRegion/Geometry/TerrainL37"]
+script = ExtResource("25_forest_scatter")
+seed = 31
+edge_trees = 45
+inner_trees = 0
+bushes = 20
+grass = 300
+edge_min_x = 18.5
+keep_clear = Array[Rect2]([Rect2(-17, -128, 34, 48)])
+
+[node name="TerrainR38" type="Node3D" parent="NavRegion/Geometry"]
+script = ExtResource("24_terrain_patch")
+x_range = Vector2(0, 41.5)
+z_range = Vector2(-80, -128)
+play_half_width = 17.5
+path_half_width = 2.2
+inner_amplitude = 0.25
+hill_height = 5.0
+
+[node name="Forest" type="Node3D" parent="NavRegion/Geometry/TerrainR38"]
+script = ExtResource("25_forest_scatter")
+seed = 32
+edge_trees = 45
+inner_trees = 0
+bushes = 20
+grass = 300
+edge_min_x = 18.5
+keep_clear = Array[Rect2]([Rect2(-17, -128, 34, 48)])
+
+[node name="Battlement39" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(-17.2, 0.0, -104.0)
+script = ExtResource("26_battlement")
+kind = 0
+length = 40.0
+height = 4.0
+thickness = 0.8
+rotation_degrees = Vector3(0.0, 90.0, 0.0)
+
+[node name="Battlement40" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(17.2, 0.0, -104.0)
+script = ExtResource("26_battlement")
+kind = 0
+length = 40.0
+height = 4.0
+thickness = 0.8
+rotation_degrees = Vector3(0.0, 90.0, 0.0)
+
+[node name="Battlement41" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(-10.6, 0.0, -84.0)
+script = ExtResource("26_battlement")
+kind = 1
+length = 14.8
+height = 5.0
+thickness = 2.0
+
+[node name="Battlement42" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(10.6, 0.0, -84.0)
+script = ExtResource("26_battlement")
+kind = 1
+length = 14.8
+height = 5.0
+thickness = 2.0
+
+[node name="GateTower43" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(-4.4, 3.5, -84.0)
+use_collision = true
+radius = 1.5
+height = 7.0
+sides = 10
+material = SubResource("ShaderMaterial_12")
+
+[node name="GateRoof44" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(-4.4, 8.1, -84.0)
+use_collision = false
+radius = 2.0
+height = 2.2
+sides = 10
+material = SubResource("StandardMaterial3D_17")
+cone = true
+
+[node name="GateTower45" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(4.4, 3.5, -84.0)
+use_collision = true
+radius = 1.5
+height = 7.0
+sides = 10
+material = SubResource("ShaderMaterial_12")
+
+[node name="GateRoof46" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(4.4, 8.1, -84.0)
+use_collision = false
+radius = 2.0
+height = 2.2
+sides = 10
+material = SubResource("StandardMaterial3D_17")
+cone = true
+
+[node name="Battlement47" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(-10.6, 0.0, -124.0)
+script = ExtResource("26_battlement")
+kind = 1
+length = 14.8
+height = 5.0
+thickness = 2.0
+
+[node name="Battlement48" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(10.6, 0.0, -124.0)
+script = ExtResource("26_battlement")
+kind = 1
+length = 14.8
+height = 5.0
+thickness = 2.0
+
+[node name="GateTower49" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(-4.4, 3.5, -124.0)
+use_collision = true
+radius = 1.5
+height = 7.0
+sides = 10
+material = SubResource("ShaderMaterial_12")
+
+[node name="GateRoof50" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(-4.4, 8.1, -124.0)
+use_collision = false
+radius = 2.0
+height = 2.2
+sides = 10
+material = SubResource("StandardMaterial3D_17")
+cone = true
+
+[node name="GateTower51" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(4.4, 3.5, -124.0)
+use_collision = true
+radius = 1.5
+height = 7.0
+sides = 10
+material = SubResource("ShaderMaterial_12")
+
+[node name="GateRoof52" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(4.4, 8.1, -124.0)
+use_collision = false
+radius = 2.0
+height = 2.2
+sides = 10
+material = SubResource("StandardMaterial3D_17")
+cone = true
+
+[node name="Battlement53" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(-4.0, 0.0, -128.0)
+script = ExtResource("26_battlement")
+kind = 1
+length = 8.0
+height = 4.5
+thickness = 1.6
+rotation_degrees = Vector3(0.0, 90.0, 0.0)
+
+[node name="Battlement54" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(4.0, 0.0, -128.0)
+script = ExtResource("26_battlement")
+kind = 1
+length = 8.0
+height = 4.5
+thickness = 1.6
+rotation_degrees = Vector3(0.0, 90.0, 0.0)
+
+[node name="Tent55" type="StaticBody3D" parent="NavRegion/Geometry"]
+position = Vector3(-11.0, 0.0, -96.0)
+rotation_degrees = Vector3(0.0, 90.0, 0.0)
+collision_mask = 0
+
+[node name="Cloth" type="MeshInstance3D" parent="NavRegion/Geometry/Tent55"]
+position = Vector3(0.0, 1.15, 0.0)
+mesh = SubResource("PrismMesh_34")
+
+[node name="Shape" type="CollisionShape3D" parent="NavRegion/Geometry/Tent55"]
+position = Vector3(0.0, 0.9, 0.0)
+shape = SubResource("BoxShape3D_35")
+
+[node name="PoleA" type="MeshInstance3D" parent="NavRegion/Geometry/Tent55"]
+position = Vector3(0.0, 1.3, -2.25)
+mesh = SubResource("CylinderMesh_36")
+
+[node name="PoleB" type="MeshInstance3D" parent="NavRegion/Geometry/Tent55"]
+position = Vector3(0.0, 1.3, 2.25)
+mesh = SubResource("CylinderMesh_37")
+
+[node name="Tent56" type="StaticBody3D" parent="NavRegion/Geometry"]
+position = Vector3(11.0, 0.0, -100.0)
+rotation_degrees = Vector3(0.0, 90.0, 0.0)
+collision_mask = 0
+
+[node name="Cloth" type="MeshInstance3D" parent="NavRegion/Geometry/Tent56"]
+position = Vector3(0.0, 1.15, 0.0)
+mesh = SubResource("PrismMesh_38")
+
+[node name="Shape" type="CollisionShape3D" parent="NavRegion/Geometry/Tent56"]
+position = Vector3(0.0, 0.9, 0.0)
+shape = SubResource("BoxShape3D_39")
+
+[node name="PoleA" type="MeshInstance3D" parent="NavRegion/Geometry/Tent56"]
+position = Vector3(0.0, 1.3, -2.25)
+mesh = SubResource("CylinderMesh_40")
+
+[node name="PoleB" type="MeshInstance3D" parent="NavRegion/Geometry/Tent56"]
+position = Vector3(0.0, 1.3, 2.25)
+mesh = SubResource("CylinderMesh_41")
+
+[node name="Tent57" type="StaticBody3D" parent="NavRegion/Geometry"]
+position = Vector3(-10.0, 0.0, -116.0)
+rotation_degrees = Vector3(0.0, 0.0, 0.0)
+collision_mask = 0
+
+[node name="Cloth" type="MeshInstance3D" parent="NavRegion/Geometry/Tent57"]
+position = Vector3(0.0, 1.15, 0.0)
+mesh = SubResource("PrismMesh_42")
+
+[node name="Shape" type="CollisionShape3D" parent="NavRegion/Geometry/Tent57"]
+position = Vector3(0.0, 0.9, 0.0)
+shape = SubResource("BoxShape3D_43")
+
+[node name="PoleA" type="MeshInstance3D" parent="NavRegion/Geometry/Tent57"]
+position = Vector3(0.0, 1.3, -2.25)
+mesh = SubResource("CylinderMesh_44")
+
+[node name="PoleB" type="MeshInstance3D" parent="NavRegion/Geometry/Tent57"]
+position = Vector3(0.0, 1.3, 2.25)
+mesh = SubResource("CylinderMesh_45")
+
+[node name="Tent58" type="StaticBody3D" parent="NavRegion/Geometry"]
+position = Vector3(12.0, 0.0, -117.0)
+rotation_degrees = Vector3(0.0, 0.0, 0.0)
+collision_mask = 0
+
+[node name="Cloth" type="MeshInstance3D" parent="NavRegion/Geometry/Tent58"]
+position = Vector3(0.0, 1.15, 0.0)
+mesh = SubResource("PrismMesh_46")
+
+[node name="Shape" type="CollisionShape3D" parent="NavRegion/Geometry/Tent58"]
+position = Vector3(0.0, 0.9, 0.0)
+shape = SubResource("BoxShape3D_47")
+
+[node name="PoleA" type="MeshInstance3D" parent="NavRegion/Geometry/Tent58"]
+position = Vector3(0.0, 1.3, -2.25)
+mesh = SubResource("CylinderMesh_48")
+
+[node name="PoleB" type="MeshInstance3D" parent="NavRegion/Geometry/Tent58"]
+position = Vector3(0.0, 1.3, 2.25)
+mesh = SubResource("CylinderMesh_49")
+
+[node name="TowerPost59" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(-15.6, 2.5, -89.1)
+use_collision = true
+radius = 0.14
+height = 5.0
+sides = 6
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerPost60" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(-15.6, 2.5, -86.9)
+use_collision = true
+radius = 0.14
+height = 5.0
+sides = 6
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerPost61" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(-13.4, 2.5, -89.1)
+use_collision = true
+radius = 0.14
+height = 5.0
+sides = 6
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerPost62" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(-13.4, 2.5, -86.9)
+use_collision = true
+radius = 0.14
+height = 5.0
+sides = 6
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerDeck63" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(-14.5, 5.0, -88.0)
+use_collision = false
+size = Vector3(3.0, 0.2, 3.0)
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerRail64" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(-14.5, 5.55, -89.45)
+use_collision = false
+size = Vector3(3.0, 0.9, 0.12)
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerRail65" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(-14.5, 5.55, -86.55)
+use_collision = false
+size = Vector3(3.0, 0.9, 0.12)
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerRail66" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(-15.95, 5.55, -88.0)
+use_collision = false
+size = Vector3(0.12, 0.9, 3.0)
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerRail67" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(-13.05, 5.55, -88.0)
+use_collision = false
+size = Vector3(0.12, 0.9, 3.0)
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerRoof68" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(-14.5, 7.1, -88.0)
+use_collision = false
+radius = 2.2
+height = 1.4
+sides = 4
+material = SubResource("StandardMaterial3D_17")
+cone = true
+
+[node name="TowerPost69" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(13.4, 2.5, -122.1)
+use_collision = true
+radius = 0.14
+height = 5.0
+sides = 6
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerPost70" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(13.4, 2.5, -119.9)
+use_collision = true
+radius = 0.14
+height = 5.0
+sides = 6
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerPost71" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(15.6, 2.5, -122.1)
+use_collision = true
+radius = 0.14
+height = 5.0
+sides = 6
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerPost72" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(15.6, 2.5, -119.9)
+use_collision = true
+radius = 0.14
+height = 5.0
+sides = 6
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerDeck73" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(14.5, 5.0, -121.0)
+use_collision = false
+size = Vector3(3.0, 0.2, 3.0)
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerRail74" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(14.5, 5.55, -122.45)
+use_collision = false
+size = Vector3(3.0, 0.9, 0.12)
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerRail75" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(14.5, 5.55, -119.55)
+use_collision = false
+size = Vector3(3.0, 0.9, 0.12)
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerRail76" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(13.05, 5.55, -121.0)
+use_collision = false
+size = Vector3(0.12, 0.9, 3.0)
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerRail77" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(15.95, 5.55, -121.0)
+use_collision = false
+size = Vector3(0.12, 0.9, 3.0)
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerRoof78" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(14.5, 7.1, -121.0)
+use_collision = false
+radius = 2.2
+height = 1.4
+sides = 4
+material = SubResource("StandardMaterial3D_17")
+cone = true
+
+[node name="BannerPole79" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(-6.5, 2.2, -86.5)
+use_collision = false
+radius = 0.05
+height = 4.4
+sides = 6
+material = SubResource("ShaderMaterial_15")
+
+[node name="Banner80" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(-6.05, 3.6, -86.5)
+use_collision = false
+size = Vector3(0.9, 1.4, 0.04)
+material = SubResource("StandardMaterial3D_18")
+
+[node name="BannerPole81" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(6.5, 2.2, -86.5)
+use_collision = false
+radius = 0.05
+height = 4.4
+sides = 6
+material = SubResource("ShaderMaterial_15")
+
+[node name="Banner82" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(6.95, 3.6, -86.5)
+use_collision = false
+size = Vector3(0.9, 1.4, 0.04)
+material = SubResource("StandardMaterial3D_18")
+
+[node name="BannerPole83" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(-15.0, 2.2, -110.0)
+use_collision = false
+radius = 0.05
+height = 4.4
+sides = 6
+material = SubResource("ShaderMaterial_15")
+
+[node name="Banner84" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(-14.55, 3.6, -110.0)
+use_collision = false
+size = Vector3(0.9, 1.4, 0.04)
+material = SubResource("StandardMaterial3D_18")
+
+[node name="BannerPole85" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(15.0, 2.2, -96.0)
+use_collision = false
+radius = 0.05
+height = 4.4
+sides = 6
+material = SubResource("ShaderMaterial_15")
+
+[node name="Banner86" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(15.45, 3.6, -96.0)
+use_collision = false
+size = Vector3(0.9, 1.4, 0.04)
+material = SubResource("StandardMaterial3D_18")
+
+[node name="Crate87" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(-5.0, 0.5, -95.0)
+use_collision = true
+size = Vector3(1.1, 1.0, 1.1)
+material = SubResource("StandardMaterial3D_11")
+rotation_degrees = Vector3(0.0, 20.0, 0.0)
+
+[node name="Crate88" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(6.0, 0.5, -112.0)
+use_collision = true
+size = Vector3(1.1, 1.0, 1.1)
+material = SubResource("StandardMaterial3D_11")
+rotation_degrees = Vector3(0.0, 20.0, 0.0)
+
+[node name="Crate89" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(-13.0, 0.5, -106.0)
+use_collision = true
+size = Vector3(1.1, 1.0, 1.1)
+material = SubResource("StandardMaterial3D_11")
+rotation_degrees = Vector3(0.0, 20.0, 0.0)
+
+[node name="Crate90" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(13.0, 0.5, -108.0)
+use_collision = true
+size = Vector3(1.1, 1.0, 1.1)
+material = SubResource("StandardMaterial3D_11")
+rotation_degrees = Vector3(0.0, 20.0, 0.0)
+
+[node name="Crate91" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(-4.2, 0.5, -95.6)
+use_collision = true
+size = Vector3(1.1, 1.0, 1.1)
+material = SubResource("StandardMaterial3D_11")
+rotation_degrees = Vector3(0.0, 20.0, 0.0)
+
+[node name="S2" type="Node3D" parent="Sections"]
+script = ExtResource("15_section")
+index = 2
+title = "Rakshasa Camp"
+exit_gate_path = NodePath("ExitGate")
+
+[node name="Spawn" type="Marker3D" parent="Sections/S2"]
+position = Vector3(0.0, 0.0, -87.0)
+
+[node name="CheckpointArea" type="Area3D" parent="Sections/S2"]
+position = Vector3(0.0, 1.5, -87.0)
+
+[node name="Shape" type="CollisionShape3D" parent="Sections/S2/CheckpointArea"]
+shape = SubResource("BoxShape3D_50")
+
+[node name="ExitGate" parent="Sections/S2" instance=ExtResource("4_gate")]
+position = Vector3(0.0, 0.0, -124.0)
+
+[node name="CampFight" type="Node3D" parent="Sections/S2"]
+script = ExtResource("16_encounter")
+start_banner = "Ambush!"
+
+[node name="Trigger" type="Area3D" parent="Sections/S2/CampFight"]
+position = Vector3(0.0, 1.5, -92.0)
+
+[node name="Shape" type="CollisionShape3D" parent="Sections/S2/CampFight/Trigger"]
+shape = SubResource("BoxShape3D_51")
+
+[node name="Wave1" type="Node3D" parent="Sections/S2/CampFight"]
+
+[node name="Spawn92" type="Marker3D" parent="Sections/S2/CampFight/Wave1"]
+position = Vector3(-8.0, 0.0, -112.0)
+script = ExtResource("17_spawn_point")
+enemy_scene = ExtResource("9_grunt")
+rotation_degrees = Vector3(0.0, 180.0, 0.0)
+
+[node name="Spawn93" type="Marker3D" parent="Sections/S2/CampFight/Wave1"]
+position = Vector3(8.0, 0.0, -112.0)
+script = ExtResource("17_spawn_point")
+enemy_scene = ExtResource("9_grunt")
+rotation_degrees = Vector3(0.0, 180.0, 0.0)
+
+[node name="Spawn94" type="Marker3D" parent="Sections/S2/CampFight/Wave1"]
+position = Vector3(0.0, 0.0, -120.0)
+script = ExtResource("17_spawn_point")
+enemy_scene = ExtResource("9_grunt")
+rotation_degrees = Vector3(0.0, 180.0, 0.0)
+
+[node name="Spawn95" type="Marker3D" parent="Sections/S2/CampFight/Wave1"]
+position = Vector3(-3.0, 0.0, -116.0)
+script = ExtResource("17_spawn_point")
+enemy_scene = ExtResource("9_grunt")
+rotation_degrees = Vector3(0.0, 180.0, 0.0)
+
+[node name="Wave2" type="Node3D" parent="Sections/S2/CampFight"]
+
+[node name="Spawn96" type="Marker3D" parent="Sections/S2/CampFight/Wave2"]
+position = Vector3(-12.0, 0.0, -104.0)
+script = ExtResource("17_spawn_point")
+enemy_scene = ExtResource("9_grunt")
+rotation_degrees = Vector3(0.0, 90.0, 0.0)
+
+[node name="Spawn97" type="Marker3D" parent="Sections/S2/CampFight/Wave2"]
+position = Vector3(12.0, 0.0, -104.0)
+script = ExtResource("17_spawn_point")
+enemy_scene = ExtResource("9_grunt")
+rotation_degrees = Vector3(0.0, -90.0, 0.0)
+
+[node name="Spawn98" type="Marker3D" parent="Sections/S2/CampFight/Wave2"]
+position = Vector3(-6.0, 0.0, -120.0)
+script = ExtResource("17_spawn_point")
+enemy_scene = ExtResource("9_grunt")
+rotation_degrees = Vector3(0.0, 180.0, 0.0)
+
+[node name="Spawn99" type="Marker3D" parent="Sections/S2/CampFight/Wave2"]
+position = Vector3(6.0, 0.0, -120.0)
+script = ExtResource("17_spawn_point")
+enemy_scene = ExtResource("9_grunt")
+rotation_degrees = Vector3(0.0, 180.0, 0.0)
+
+[node name="Spawn100" type="Marker3D" parent="Sections/S2/CampFight/Wave2"]
+position = Vector3(0.0, 0.0, -122.0)
+script = ExtResource("17_spawn_point")
+enemy_scene = ExtResource("10_archer")
+rotation_degrees = Vector3(0.0, 180.0, 0.0)
+
+[node name="Torch101" parent="Sections/S2" instance=ExtResource("1_torch")]
+position = Vector3(-6.0, 0.0, -104.0)
+
+[node name="Torch102" parent="Sections/S2" instance=ExtResource("1_torch")]
+position = Vector3(6.0, 0.0, -108.0)
+
+[node name="Torch103" parent="Sections/S2" instance=ExtResource("1_torch")]
+position = Vector3(0.0, 0.0, -119.0)
+
+[node name="Herb104" parent="Sections/S2" instance=ExtResource("5_healing_herb")]
+position = Vector3(-14.0, 0.0, -121.0)
+
+[node name="TerrainL105" type="Node3D" parent="NavRegion/Geometry"]
+script = ExtResource("24_terrain_patch")
+x_range = Vector2(-31.5, 0)
+z_range = Vector2(-128, -186)
+play_half_width = 7.5
+path_half_width = 2.2
+inner_amplitude = 0.3
+hill_height = 3.0
+
+[node name="Forest" type="Node3D" parent="NavRegion/Geometry/TerrainL105"]
+script = ExtResource("25_forest_scatter")
+seed = 41
+edge_trees = 35
+inner_trees = 0
+bushes = 15
+grass = 250
+edge_min_x = 15.5
+
+[node name="TerrainR106" type="Node3D" parent="NavRegion/Geometry"]
+script = ExtResource("24_terrain_patch")
+x_range = Vector2(0, 31.5)
+z_range = Vector2(-128, -186)
+play_half_width = 7.5
+path_half_width = 2.2
+inner_amplitude = 0.3
+hill_height = 3.0
+
+[node name="Forest" type="Node3D" parent="NavRegion/Geometry/TerrainR106"]
+script = ExtResource("25_forest_scatter")
+seed = 42
+edge_trees = 35
+inner_trees = 0
+bushes = 15
+grass = 250
+edge_min_x = 15.5
+
+[node name="CliffL107" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(-15.0, 4.5, -157.0)
+use_collision = true
+size = Vector3(2.0, 9.0, 50.0)
+material = SubResource("ShaderMaterial_13")
+
+[node name="CliffR108" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(15.0, 4.5, -157.0)
+use_collision = true
+size = Vector3(2.0, 9.0, 50.0)
+material = SubResource("ShaderMaterial_13")
+
+[node name="Battlement109" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(-9.6, 0.0, -182.0)
+script = ExtResource("26_battlement")
+kind = 1
+length = 12.8
+height = 5.0
+thickness = 2.0
+
+[node name="Battlement110" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(9.6, 0.0, -182.0)
+script = ExtResource("26_battlement")
+kind = 1
+length = 12.8
+height = 5.0
+thickness = 2.0
+
+[node name="GateTower111" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(-4.4, 3.5, -182.0)
+use_collision = true
+radius = 1.5
+height = 7.0
+sides = 10
+material = SubResource("ShaderMaterial_12")
+
+[node name="GateRoof112" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(-4.4, 8.1, -182.0)
+use_collision = false
+radius = 2.0
+height = 2.2
+sides = 10
+material = SubResource("StandardMaterial3D_17")
+cone = true
+
+[node name="GateTower113" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(4.4, 3.5, -182.0)
+use_collision = true
+radius = 1.5
+height = 7.0
+sides = 10
+material = SubResource("ShaderMaterial_12")
+
+[node name="GateRoof114" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(4.4, 8.1, -182.0)
+use_collision = false
+radius = 2.0
+height = 2.2
+sides = 10
+material = SubResource("StandardMaterial3D_17")
+cone = true
+
+[node name="Battlement115" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(-4.0, 0.0, -186.0)
+script = ExtResource("26_battlement")
+kind = 1
+length = 8.0
+height = 4.5
+thickness = 1.6
+rotation_degrees = Vector3(0.0, 90.0, 0.0)
+
+[node name="Battlement116" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(4.0, 0.0, -186.0)
+script = ExtResource("26_battlement")
+kind = 1
+length = 8.0
+height = 4.5
+thickness = 1.6
+rotation_degrees = Vector3(0.0, 90.0, 0.0)
+
+[node name="LedgeL117" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(-11.0, 1.75, -158.0)
+use_collision = true
+size = Vector3(6.0, 3.5, 40.0)
+material = SubResource("ShaderMaterial_13")
+
+[node name="LedgeR118" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(11.0, 1.75, -158.0)
+use_collision = true
+size = Vector3(6.0, 3.5, 40.0)
+material = SubResource("ShaderMaterial_13")
+
+[node name="Battlement119" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(-8.4, 3.5, -158.0)
+script = ExtResource("26_battlement")
+kind = 0
+length = 38.0
+height = 1.0
+thickness = 0.4
+rotation_degrees = Vector3(0.0, 90.0, 0.0)
+decorative = true
+
+[node name="Battlement120" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(8.4, 3.5, -158.0)
+script = ExtResource("26_battlement")
+kind = 0
+length = 38.0
+height = 1.0
+thickness = 0.4
+rotation_degrees = Vector3(0.0, 90.0, 0.0)
+decorative = true
+
+[node name="S3" type="Node3D" parent="Sections"]
+script = ExtResource("15_section")
+index = 3
+title = "The Ravine"
+exit_gate_path = NodePath("ExitGate")
+
+[node name="Spawn" type="Marker3D" parent="Sections/S3"]
+position = Vector3(0.0, 0.0, -129.0)
+
+[node name="CheckpointArea" type="Area3D" parent="Sections/S3"]
+position = Vector3(0.0, 1.5, -134.0)
+
+[node name="Shape" type="CollisionShape3D" parent="Sections/S3/CheckpointArea"]
+shape = SubResource("BoxShape3D_52")
+
+[node name="ExitGate" parent="Sections/S3" instance=ExtResource("4_gate")]
+position = Vector3(0.0, 0.0, -182.0)
+
+[node name="Bow" type="Area3D" parent="Sections/S3"]
+position = Vector3(0.0, 1.5, -136.0)
+script = ExtResource("18_caption_trigger")
+speaker = "Vishwamitra"
+lines = PackedStringArray("Archers on the cliffs! Hold right click to aim your bow, then left click to loose. Hold it to charge a piercing shot.", "Tab switches your target. An arrow that flies past a torch will catch fire.", "Those clay pots are full of oil. Strike one and it will burst.")
+
+[node name="Shape" type="CollisionShape3D" parent="Sections/S3/Bow"]
+shape = SubResource("BoxShape3D_53")
+
+[node name="Ravine" type="Node3D" parent="Sections/S3"]
+script = ExtResource("16_encounter")
+
+[node name="Trigger" type="Area3D" parent="Sections/S3/Ravine"]
+position = Vector3(0.0, 1.5, -138.0)
+
+[node name="Shape" type="CollisionShape3D" parent="Sections/S3/Ravine/Trigger"]
+shape = SubResource("BoxShape3D_54")
+
+[node name="Placed" type="Node3D" parent="Sections/S3/Ravine"]
+
+[node name="Archer121" parent="Sections/S3/Ravine/Placed" instance=ExtResource("10_archer")]
+position = Vector3(-10.5, 3.5, -146.0)
+start_aware = false
+start_yaw_degrees = -90.0
+stationary = true
+vision_range = 28.0
+
+[node name="Archer122" parent="Sections/S3/Ravine/Placed" instance=ExtResource("10_archer")]
+position = Vector3(10.5, 3.5, -158.0)
+start_aware = false
+start_yaw_degrees = 90.0
+stationary = true
+vision_range = 28.0
+
+[node name="Archer123" parent="Sections/S3/Ravine/Placed" instance=ExtResource("10_archer")]
+position = Vector3(-10.5, 3.5, -170.0)
+start_aware = false
+start_yaw_degrees = -90.0
+stationary = true
+vision_range = 28.0
+
+[node name="Wave1" type="Node3D" parent="Sections/S3/Ravine"]
+
+[node name="Spawn124" type="Marker3D" parent="Sections/S3/Ravine/Wave1"]
+position = Vector3(0.0, 0.0, -152.0)
+script = ExtResource("17_spawn_point")
+enemy_scene = ExtResource("9_grunt")
+rotation_degrees = Vector3(0.0, 180.0, 0.0)
+
+[node name="Spawn125" type="Marker3D" parent="Sections/S3/Ravine/Wave1"]
+position = Vector3(3.0, 0.0, -166.0)
+script = ExtResource("17_spawn_point")
+enemy_scene = ExtResource("9_grunt")
+rotation_degrees = Vector3(0.0, 180.0, 0.0)
+
+[node name="Wave2" type="Node3D" parent="Sections/S3/Ravine"]
+
+[node name="Spawn126" type="Marker3D" parent="Sections/S3/Ravine/Wave2"]
+position = Vector3(-3.0, 0.0, -176.0)
+script = ExtResource("17_spawn_point")
+enemy_scene = ExtResource("9_grunt")
+rotation_degrees = Vector3(0.0, 180.0, 0.0)
+
+[node name="Spawn127" type="Marker3D" parent="Sections/S3/Ravine/Wave2"]
+position = Vector3(3.0, 0.0, -176.0)
+script = ExtResource("17_spawn_point")
+enemy_scene = ExtResource("9_grunt")
+rotation_degrees = Vector3(0.0, 180.0, 0.0)
+
+[node name="Pot128" parent="Sections/S3" instance=ExtResource("2_explosive_pot")]
+position = Vector3(-9.2, 3.5, -148.0)
+
+[node name="Pot129" parent="Sections/S3" instance=ExtResource("2_explosive_pot")]
+position = Vector3(9.2, 3.5, -156.0)
+
+[node name="Pot130" parent="Sections/S3" instance=ExtResource("2_explosive_pot")]
+position = Vector3(-9.2, 3.5, -168.0)
+
+[node name="Pot131" parent="Sections/S3" instance=ExtResource("2_explosive_pot")]
+position = Vector3(4.0, 0.0, -171.0)
+
+[node name="Torch132" parent="Sections/S3" instance=ExtResource("1_torch")]
+position = Vector3(-5.0, 0.0, -148.0)
+
+[node name="Torch133" parent="Sections/S3" instance=ExtResource("1_torch")]
+position = Vector3(5.0, 0.0, -160.0)
+
+[node name="Torch134" parent="Sections/S3" instance=ExtResource("1_torch")]
+position = Vector3(-5.0, 0.0, -172.0)
+
+[node name="TerrainL135" type="Node3D" parent="NavRegion/Geometry"]
+script = ExtResource("24_terrain_patch")
+x_range = Vector2(-37, 0)
+z_range = Vector2(-186, -234)
+play_half_width = 13.0
+path_half_width = 2.2
+inner_amplitude = 0.3
+hill_height = 5.0
+mounds = Array[Vector3]([Vector3(-11.0, -225.0, 0.8), Vector3(11.0, -197.0, 0.7)])
+
+[node name="Forest" type="Node3D" parent="NavRegion/Geometry/TerrainL135"]
+script = ExtResource("25_forest_scatter")
+seed = 51
+edge_trees = 50
+inner_trees = 0
+bushes = 35
+grass = 450
+edge_min_x = 14.5
+keep_clear = Array[Rect2]([Rect2(-11, -228, 22, 34)])
+
+[node name="TerrainR136" type="Node3D" parent="NavRegion/Geometry"]
+script = ExtResource("24_terrain_patch")
+x_range = Vector2(0, 37)
+z_range = Vector2(-186, -234)
+play_half_width = 13.0
+path_half_width = 2.2
+inner_amplitude = 0.3
+hill_height = 5.0
+mounds = Array[Vector3]([Vector3(-11.0, -225.0, 0.8), Vector3(11.0, -197.0, 0.7)])
+
+[node name="Forest" type="Node3D" parent="NavRegion/Geometry/TerrainR136"]
+script = ExtResource("25_forest_scatter")
+seed = 52
+edge_trees = 50
+inner_trees = 0
+bushes = 35
+grass = 450
+edge_min_x = 14.5
+keep_clear = Array[Rect2]([Rect2(-11, -228, 22, 34)])
+
+[node name="Boundary137" type="StaticBody3D" parent="NavRegion/Geometry"]
+position = Vector3(-15.0, 4.0, -210.0)
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="NavRegion/Geometry/Boundary137"]
+shape = SubResource("BoxShape3D_55")
+
+[node name="Boundary138" type="StaticBody3D" parent="NavRegion/Geometry"]
+position = Vector3(15.0, 4.0, -210.0)
+collision_mask = 0
+
+[node name="Shape" type="CollisionShape3D" parent="NavRegion/Geometry/Boundary138"]
+shape = SubResource("BoxShape3D_56")
+
+[node name="Battlement139" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(-9.6, 0.0, -190.0)
+script = ExtResource("26_battlement")
+kind = 1
+length = 12.8
+height = 5.0
+thickness = 2.0
+
+[node name="Battlement140" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(9.6, 0.0, -190.0)
+script = ExtResource("26_battlement")
+kind = 1
+length = 12.8
+height = 5.0
+thickness = 2.0
+
+[node name="GateTower141" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(-4.4, 3.5, -190.0)
+use_collision = true
+radius = 1.5
+height = 7.0
+sides = 10
+material = SubResource("ShaderMaterial_12")
+
+[node name="GateRoof142" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(-4.4, 8.1, -190.0)
+use_collision = false
+radius = 2.0
+height = 2.2
+sides = 10
+material = SubResource("StandardMaterial3D_17")
+cone = true
+
+[node name="GateTower143" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(4.4, 3.5, -190.0)
+use_collision = true
+radius = 1.5
+height = 7.0
+sides = 10
+material = SubResource("ShaderMaterial_12")
+
+[node name="GateRoof144" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(4.4, 8.1, -190.0)
+use_collision = false
+radius = 2.0
+height = 2.2
+sides = 10
+material = SubResource("StandardMaterial3D_17")
+cone = true
+
+[node name="Battlement145" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(-9.6, 0.0, -230.0)
+script = ExtResource("26_battlement")
+kind = 1
+length = 12.8
+height = 5.0
+thickness = 2.0
+
+[node name="Battlement146" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(9.6, 0.0, -230.0)
+script = ExtResource("26_battlement")
+kind = 1
+length = 12.8
+height = 5.0
+thickness = 2.0
+
+[node name="GateTower147" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(-4.4, 3.5, -230.0)
+use_collision = true
+radius = 1.5
+height = 7.0
+sides = 10
+material = SubResource("ShaderMaterial_12")
+
+[node name="GateRoof148" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(-4.4, 8.1, -230.0)
+use_collision = false
+radius = 2.0
+height = 2.2
+sides = 10
+material = SubResource("StandardMaterial3D_17")
+cone = true
+
+[node name="GateTower149" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(4.4, 3.5, -230.0)
+use_collision = true
+radius = 1.5
+height = 7.0
+sides = 10
+material = SubResource("ShaderMaterial_12")
+
+[node name="GateRoof150" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(4.4, 8.1, -230.0)
+use_collision = false
+radius = 2.0
+height = 2.2
+sides = 10
+material = SubResource("StandardMaterial3D_17")
+cone = true
+
+[node name="Battlement151" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(-4.0, 0.0, -234.0)
+script = ExtResource("26_battlement")
+kind = 1
+length = 8.0
+height = 4.5
+thickness = 1.6
+rotation_degrees = Vector3(0.0, 90.0, 0.0)
+
+[node name="Battlement152" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(4.0, 0.0, -234.0)
+script = ExtResource("26_battlement")
+kind = 1
+length = 8.0
+height = 4.5
+thickness = 1.6
+rotation_degrees = Vector3(0.0, 90.0, 0.0)
+
+[node name="Pedestal153" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(0.0, 0.6, -206.0)
+use_collision = true
+size = Vector3(2.0, 1.2, 2.0)
+material = SubResource("ShaderMaterial_12")
+
+[node name="PedestalStep154" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(0.0, 0.15, -206.0)
+use_collision = true
+size = Vector3(3.2, 0.3, 3.2)
+material = SubResource("ShaderMaterial_12")
+
+[node name="Pillar155" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(-7.8, 2.1, -205.5)
+use_collision = true
+radius = 0.7
+height = 4.2
+sides = 12
+material = SubResource("ShaderMaterial_12")
+
+[node name="Pillar156" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(7.8, 2.1, -214.5)
+use_collision = true
+radius = 0.7
+height = 4.2
+sides = 12
+material = SubResource("ShaderMaterial_12")
+
+[node name="Pillar157" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(0.0, 2.1, -220.0)
+use_collision = true
+radius = 0.7
+height = 4.2
+sides = 12
+material = SubResource("ShaderMaterial_12")
+
+[node name="Pillar158" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(7.8, 1.3, -205.5)
+use_collision = true
+radius = 0.7
+height = 2.6
+sides = 12
+material = SubResource("ShaderMaterial_12")
+
+[node name="Pillar159" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(-7.8, 1.3, -214.5)
+use_collision = true
+radius = 0.7
+height = 2.6
+sides = 12
+material = SubResource("ShaderMaterial_12")
+
+[node name="Ruin160" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(-12.0, 0.9, -200.0)
+use_collision = true
+size = Vector3(1.2, 1.8, 6.0)
+material = SubResource("ShaderMaterial_12")
+rotation_degrees = Vector3(0.0, 8.0, 4.0)
+
+[node name="Ruin161" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(12.5, 1.1, -222.0)
+use_collision = true
+size = Vector3(1.2, 2.2, 5.0)
+material = SubResource("ShaderMaterial_12")
+rotation_degrees = Vector3(0.0, -12.0, -3.0)
+
+[node name="Boulder162" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(-10.0, 0.0, -217.0)
+rotation_degrees = Vector3(0.0, 20.0, 0.0)
+script = ExtResource("27_rock")
+size = Vector3(1.3, 0.9, 1.2)
+rock_seed = 165
+
+[node name="S4" type="Node3D" parent="Sections"]
+script = ExtResource("15_section")
+index = 4
+title = "The Ruined Shrine"
+exit_gate_path = NodePath("ExitGate")
+
+[node name="Spawn" type="Marker3D" parent="Sections/S4"]
+position = Vector3(0.0, 0.0, -187.0)
+
+[node name="CheckpointArea" type="Area3D" parent="Sections/S4"]
+position = Vector3(0.0, 1.5, -192.0)
+
+[node name="Shape" type="CollisionShape3D" parent="Sections/S4/CheckpointArea"]
+shape = SubResource("BoxShape3D_57")
+
+[node name="ExitGate" parent="Sections/S4" instance=ExtResource("4_gate")]
+position = Vector3(0.0, 0.0, -230.0)
+
+[node name="Shrine" type="Area3D" parent="Sections/S4"]
+position = Vector3(0.0, 1.5, -193.0)
+script = ExtResource("18_caption_trigger")
+speaker = "Vishwamitra"
+lines = PackedStringArray("This shrine is older than Ayodhya. Something divine still rests here.")
+
+[node name="Shape" type="CollisionShape3D" parent="Sections/S4/Shrine"]
+shape = SubResource("BoxShape3D_58")
+
+[node name="ChakraPickup" parent="Sections/S4" instance=ExtResource("6_chakra_pickup")]
+position = Vector3(0.0, 0.0, -206.0)
+speaker = "Vishwamitra"
+lines = PackedStringArray("The chakra of the gods. It answers your hand, Rama.", "Throw it with Q. It seeks the nearest foe, cuts all in its path, and returns to you. Its reach is short.", "That brute's shield guards his front. Strike his back with the chakra!", "When the fight is won, ring the three bells to open the way. An arrow will reach them.")
+
+[node name="ShrineAmbush" type="Node3D" parent="Sections/S4"]
+script = ExtResource("16_encounter")
+start_banner = "Ambush!"
+
+[node name="Trigger" type="Area3D" parent="Sections/S4/ShrineAmbush"]
+position = Vector3(0.0, 1.5, -206.0)
+
+[node name="Shape" type="CollisionShape3D" parent="Sections/S4/ShrineAmbush/Trigger"]
+shape = SubResource("BoxShape3D_59")
+
+[node name="Wave1" type="Node3D" parent="Sections/S4/ShrineAmbush"]
+
+[node name="Spawn163" type="Marker3D" parent="Sections/S4/ShrineAmbush/Wave1"]
+position = Vector3(0.0, 0.0, -225.0)
+script = ExtResource("17_spawn_point")
+enemy_scene = ExtResource("11_brute")
+rotation_degrees = Vector3(0.0, 180.0, 0.0)
+
+[node name="Spawn164" type="Marker3D" parent="Sections/S4/ShrineAmbush/Wave1"]
+position = Vector3(-10.0, 0.0, -222.0)
+script = ExtResource("17_spawn_point")
+enemy_scene = ExtResource("9_grunt")
+rotation_degrees = Vector3(0.0, 180.0, 0.0)
+
+[node name="Spawn165" type="Marker3D" parent="Sections/S4/ShrineAmbush/Wave1"]
+position = Vector3(10.0, 0.0, -222.0)
+script = ExtResource("17_spawn_point")
+enemy_scene = ExtResource("9_grunt")
+rotation_degrees = Vector3(0.0, 180.0, 0.0)
+
+[node name="Bells" type="Node3D" parent="Sections/S4"]
+script = ExtResource("19_bell_puzzle")
+
+[node name="Bell1" parent="Sections/S4/Bells" instance=ExtResource("3_bell")]
+position = Vector3(-7.8, 5.0, -205.5)
+
+[node name="Bell2" parent="Sections/S4/Bells" instance=ExtResource("3_bell")]
+position = Vector3(7.8, 5.0, -214.5)
+
+[node name="Bell3" parent="Sections/S4/Bells" instance=ExtResource("3_bell")]
+position = Vector3(0.0, 5.0, -220.0)
+
+[node name="Torch166" parent="Sections/S4" instance=ExtResource("1_torch")]
+position = Vector3(-11.0, 0.0, -198.0)
+
+[node name="Torch167" parent="Sections/S4" instance=ExtResource("1_torch")]
+position = Vector3(11.0, 0.0, -222.0)
+
+[node name="Herb168" parent="Sections/S4" instance=ExtResource("5_healing_herb")]
+position = Vector3(12.0, 0.0, -196.0)
+
+[node name="TerrainL169" type="Node3D" parent="NavRegion/Geometry"]
+script = ExtResource("24_terrain_patch")
+x_range = Vector2(-45, 0)
+z_range = Vector2(-234, -300)
+play_half_width = 21.0
+path_half_width = 2.2
+inner_amplitude = 0.15
+hill_height = 6.0
+
+[node name="Forest" type="Node3D" parent="NavRegion/Geometry/TerrainL169"]
+script = ExtResource("25_forest_scatter")
+seed = 61
+edge_trees = 45
+inner_trees = 0
+bushes = 20
+grass = 550
+edge_min_x = 25.0
+keep_clear = Array[Rect2]([Rect2(-22, -294, 44, 58)])
+
+[node name="TerrainR170" type="Node3D" parent="NavRegion/Geometry"]
+script = ExtResource("24_terrain_patch")
+x_range = Vector2(0, 45)
+z_range = Vector2(-234, -300)
+play_half_width = 21.0
+path_half_width = 2.2
+inner_amplitude = 0.15
+hill_height = 6.0
+
+[node name="Forest" type="Node3D" parent="NavRegion/Geometry/TerrainR170"]
+script = ExtResource("25_forest_scatter")
+seed = 62
+edge_trees = 45
+inner_trees = 0
+bushes = 20
+grass = 550
+edge_min_x = 25.0
+keep_clear = Array[Rect2]([Rect2(-22, -294, 44, 58)])
+
+[node name="Battlement171" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(-23.0, 0.0, -265.0)
+script = ExtResource("26_battlement")
+kind = 1
+length = 56.0
+height = 6.0
+thickness = 2.0
+rotation_degrees = Vector3(0.0, 90.0, 0.0)
+
+[node name="Battlement172" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(23.0, 0.0, -265.0)
+script = ExtResource("26_battlement")
+kind = 1
+length = 56.0
+height = 6.0
+thickness = 2.0
+rotation_degrees = Vector3(0.0, 90.0, 0.0)
+
+[node name="Battlement173" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(0.0, 0.0, -293.0)
+script = ExtResource("26_battlement")
+kind = 1
+length = 48.0
+height = 6.0
+thickness = 2.0
+
+[node name="FortTower174" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(-23.0, 4.5, -293.0)
+use_collision = true
+radius = 2.2
+height = 9.0
+sides = 12
+material = SubResource("ShaderMaterial_12")
+
+[node name="FortRoof175" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(-23.0, 10.2, -293.0)
+use_collision = false
+radius = 2.8
+height = 2.6
+sides = 12
+material = SubResource("StandardMaterial3D_17")
+cone = true
+
+[node name="FortTower176" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(23.0, 4.5, -293.0)
+use_collision = true
+radius = 2.2
+height = 9.0
+sides = 12
+material = SubResource("ShaderMaterial_12")
+
+[node name="FortRoof177" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(23.0, 10.2, -293.0)
+use_collision = false
+radius = 2.8
+height = 2.6
+sides = 12
+material = SubResource("StandardMaterial3D_17")
+cone = true
+
+[node name="FortTower178" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(-23.0, 4.5, -238.0)
+use_collision = true
+radius = 2.2
+height = 9.0
+sides = 12
+material = SubResource("ShaderMaterial_12")
+
+[node name="FortRoof179" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(-23.0, 10.2, -238.0)
+use_collision = false
+radius = 2.8
+height = 2.6
+sides = 12
+material = SubResource("StandardMaterial3D_17")
+cone = true
+
+[node name="FortTower180" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(23.0, 4.5, -238.0)
+use_collision = true
+radius = 2.2
+height = 9.0
+sides = 12
+material = SubResource("ShaderMaterial_12")
+
+[node name="FortRoof181" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(23.0, 10.2, -238.0)
+use_collision = false
+radius = 2.8
+height = 2.6
+sides = 12
+material = SubResource("StandardMaterial3D_17")
+cone = true
+
+[node name="Battlement182" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(-13.6, 0.0, -238.0)
+script = ExtResource("26_battlement")
+kind = 1
+length = 20.8
+height = 5.0
+thickness = 2.0
+
+[node name="Battlement183" type="Node3D" parent="NavRegion/Geometry"]
+position = Vector3(13.6, 0.0, -238.0)
+script = ExtResource("26_battlement")
+kind = 1
+length = 20.8
+height = 5.0
+thickness = 2.0
+
+[node name="GateTower184" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(-4.4, 3.5, -238.0)
+use_collision = true
+radius = 1.5
+height = 7.0
+sides = 10
+material = SubResource("ShaderMaterial_12")
+
+[node name="GateRoof185" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(-4.4, 8.1, -238.0)
+use_collision = false
+radius = 2.0
+height = 2.2
+sides = 10
+material = SubResource("StandardMaterial3D_17")
+cone = true
+
+[node name="GateTower186" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(4.4, 3.5, -238.0)
+use_collision = true
+radius = 1.5
+height = 7.0
+sides = 10
+material = SubResource("ShaderMaterial_12")
+
+[node name="GateRoof187" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(4.4, 8.1, -238.0)
+use_collision = false
+radius = 2.0
+height = 2.2
+sides = 10
+material = SubResource("StandardMaterial3D_17")
+cone = true
+
+[node name="TowerPost188" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(-20.1, 2.75, -289.1)
+use_collision = true
+radius = 0.14
+height = 5.5
+sides = 6
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerPost189" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(-20.1, 2.75, -286.9)
+use_collision = true
+radius = 0.14
+height = 5.5
+sides = 6
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerPost190" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(-17.9, 2.75, -289.1)
+use_collision = true
+radius = 0.14
+height = 5.5
+sides = 6
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerPost191" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(-17.9, 2.75, -286.9)
+use_collision = true
+radius = 0.14
+height = 5.5
+sides = 6
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerDeck192" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(-19.0, 5.5, -288.0)
+use_collision = false
+size = Vector3(3.0, 0.2, 3.0)
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerRail193" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(-19.0, 6.05, -289.45)
+use_collision = false
+size = Vector3(3.0, 0.9, 0.12)
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerRail194" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(-19.0, 6.05, -286.55)
+use_collision = false
+size = Vector3(3.0, 0.9, 0.12)
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerRail195" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(-20.45, 6.05, -288.0)
+use_collision = false
+size = Vector3(0.12, 0.9, 3.0)
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerRail196" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(-17.55, 6.05, -288.0)
+use_collision = false
+size = Vector3(0.12, 0.9, 3.0)
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerRoof197" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(-19.0, 7.6, -288.0)
+use_collision = false
+radius = 2.2
+height = 1.4
+sides = 4
+material = SubResource("StandardMaterial3D_17")
+cone = true
+
+[node name="TowerPost198" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(17.9, 2.75, -289.1)
+use_collision = true
+radius = 0.14
+height = 5.5
+sides = 6
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerPost199" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(17.9, 2.75, -286.9)
+use_collision = true
+radius = 0.14
+height = 5.5
+sides = 6
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerPost200" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(20.1, 2.75, -289.1)
+use_collision = true
+radius = 0.14
+height = 5.5
+sides = 6
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerPost201" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(20.1, 2.75, -286.9)
+use_collision = true
+radius = 0.14
+height = 5.5
+sides = 6
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerDeck202" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(19.0, 5.5, -288.0)
+use_collision = false
+size = Vector3(3.0, 0.2, 3.0)
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerRail203" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(19.0, 6.05, -289.45)
+use_collision = false
+size = Vector3(3.0, 0.9, 0.12)
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerRail204" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(19.0, 6.05, -286.55)
+use_collision = false
+size = Vector3(3.0, 0.9, 0.12)
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerRail205" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(17.55, 6.05, -288.0)
+use_collision = false
+size = Vector3(0.12, 0.9, 3.0)
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerRail206" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(20.45, 6.05, -288.0)
+use_collision = false
+size = Vector3(0.12, 0.9, 3.0)
+material = SubResource("ShaderMaterial_15")
+
+[node name="TowerRoof207" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(19.0, 7.6, -288.0)
+use_collision = false
+radius = 2.2
+height = 1.4
+sides = 4
+material = SubResource("StandardMaterial3D_17")
+cone = true
+
+[node name="BannerPole208" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(-8.0, 2.2, -241.0)
+use_collision = false
+radius = 0.05
+height = 4.4
+sides = 6
+material = SubResource("ShaderMaterial_15")
+
+[node name="Banner209" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(-7.55, 3.6, -241.0)
+use_collision = false
+size = Vector3(0.9, 1.4, 0.04)
+material = SubResource("StandardMaterial3D_19")
+
+[node name="BannerPole210" type="CSGCylinder3D" parent="NavRegion/Geometry"]
+position = Vector3(8.0, 2.2, -241.0)
+use_collision = false
+radius = 0.05
+height = 4.4
+sides = 6
+material = SubResource("ShaderMaterial_15")
+
+[node name="Banner211" type="CSGBox3D" parent="NavRegion/Geometry"]
+position = Vector3(8.45, 3.6, -241.0)
+use_collision = false
+size = Vector3(0.9, 1.4, 0.04)
+material = SubResource("StandardMaterial3D_19")
+
+[node name="S5" type="Node3D" parent="Sections"]
+script = ExtResource("15_section")
+index = 5
+title = "The Yagna"
+
+[node name="Spawn" type="Marker3D" parent="Sections/S5"]
+position = Vector3(0.0, 0.0, -235.0)
+
+[node name="CheckpointArea" type="Area3D" parent="Sections/S5"]
+position = Vector3(0.0, 1.5, -240.0)
+
+[node name="Shape" type="CollisionShape3D" parent="Sections/S5/CheckpointArea"]
+shape = SubResource("BoxShape3D_60")
+
+[node name="EntryGate" parent="Sections/S5" instance=ExtResource("4_gate")]
+position = Vector3(0.0, 0.0, -238.0)
+start_open = true
+
+[node name="YagnaAltar" parent="Sections/S5" instance=ExtResource("7_yagna_altar")]
+position = Vector3(0.0, 0.0, -262.0)
+
+[node name="Vishwamitra" parent="Sections/S5" instance=ExtResource("8_vishwamitra")]
+position = Vector3(0.0, 0.0, -265.5)
+rotation_degrees = Vector3(0.0, 180.0, 0.0)
+
+[node name="YagnaIntro" type="Area3D" parent="Sections/S5"]
+position = Vector3(0.0, 1.5, -241.0)
+script = ExtResource("18_caption_trigger")
+speaker = "Vishwamitra"
+lines = PackedStringArray("Here, Rama. I begin the rite. The fire must not go out until dawn.")
+
+[node name="Shape" type="CollisionShape3D" parent="Sections/S5/YagnaIntro"]
+shape = SubResource("BoxShape3D_61")
+
+[node name="YagnaEncounter" type="Node3D" parent="Sections/S5"]
+script = ExtResource("16_encounter")
+start_banner = "Defend the yagna!"
+objective_path = NodePath("../YagnaAltar")
+lock_gate_path = NodePath("../EntryGate")
+
+[node name="Trigger" type="Area3D" parent="Sections/S5/YagnaEncounter"]
+position = Vector3(0.0, 1.5, -244.0)
+
+[node name="Shape" type="CollisionShape3D" parent="Sections/S5/YagnaEncounter/Trigger"]
+shape = SubResource("BoxShape3D_62")
+
+[node name="Wave1" type="Node3D" parent="Sections/S5/YagnaEncounter"]
+
+[node name="Spawn212" type="Marker3D" parent="Sections/S5/YagnaEncounter/Wave1"]
+position = Vector3(-14.0, 0.0, -284.0)
+script = ExtResource("17_spawn_point")
+enemy_scene = ExtResource("9_grunt")
+rotation_degrees = Vector3(0.0, 180.0, 0.0)
+
+[node name="Spawn213" type="Marker3D" parent="Sections/S5/YagnaEncounter/Wave1"]
+position = Vector3(14.0, 0.0, -284.0)
+script = ExtResource("17_spawn_point")
+enemy_scene = ExtResource("9_grunt")
+rotation_degrees = Vector3(0.0, 180.0, 0.0)
+
+[node name="Spawn214" type="Marker3D" parent="Sections/S5/YagnaEncounter/Wave1"]
+position = Vector3(-20.0, 0.0, -270.0)
+script = ExtResource("17_spawn_point")
+enemy_scene = ExtResource("9_grunt")
+rotation_degrees = Vector3(0.0, 90.0, 0.0)
+
+[node name="Spawn215" type="Marker3D" parent="Sections/S5/YagnaEncounter/Wave1"]
+position = Vector3(20.0, 0.0, -270.0)
+script = ExtResource("17_spawn_point")
+enemy_scene = ExtResource("9_grunt")
+rotation_degrees = Vector3(0.0, -90.0, 0.0)
+
+[node name="Spawn216" type="Marker3D" parent="Sections/S5/YagnaEncounter/Wave1"]
+position = Vector3(0.0, 0.0, -289.0)
+script = ExtResource("17_spawn_point")
+enemy_scene = ExtResource("9_grunt")
+rotation_degrees = Vector3(0.0, 180.0, 0.0)
+
+[node name="Wave2" type="Node3D" parent="Sections/S5/YagnaEncounter"]
+
+[node name="Spawn217" type="Marker3D" parent="Sections/S5/YagnaEncounter/Wave2"]
+position = Vector3(-18.0, 0.0, -252.0)
+script = ExtResource("17_spawn_point")
+enemy_scene = ExtResource("9_grunt")
+rotation_degrees = Vector3(0.0, 90.0, 0.0)
+
+[node name="Spawn218" type="Marker3D" parent="Sections/S5/YagnaEncounter/Wave2"]
+position = Vector3(18.0, 0.0, -252.0)
+script = ExtResource("17_spawn_point")
+enemy_scene = ExtResource("9_grunt")
+rotation_degrees = Vector3(0.0, -90.0, 0.0)
+
+[node name="Spawn219" type="Marker3D" parent="Sections/S5/YagnaEncounter/Wave2"]
+position = Vector3(0.0, 0.0, -288.0)
+script = ExtResource("17_spawn_point")
+enemy_scene = ExtResource("9_grunt")
+rotation_degrees = Vector3(0.0, 180.0, 0.0)
+
+[node name="Spawn220" type="Marker3D" parent="Sections/S5/YagnaEncounter/Wave2"]
+position = Vector3(-18.0, 0.0, -286.0)
+script = ExtResource("17_spawn_point")
+enemy_scene = ExtResource("10_archer")
+rotation_degrees = Vector3(0.0, 150.0, 0.0)
+
+[node name="Spawn221" type="Marker3D" parent="Sections/S5/YagnaEncounter/Wave2"]
+position = Vector3(18.0, 0.0, -286.0)
+script = ExtResource("17_spawn_point")
+enemy_scene = ExtResource("10_archer")
+rotation_degrees = Vector3(0.0, -150.0, 0.0)
+
+[node name="Wave3" type="Node3D" parent="Sections/S5/YagnaEncounter"]
+
+[node name="Spawn222" type="Marker3D" parent="Sections/S5/YagnaEncounter/Wave3"]
+position = Vector3(0.0, 0.0, -288.0)
+script = ExtResource("17_spawn_point")
+enemy_scene = ExtResource("11_brute")
+rotation_degrees = Vector3(0.0, 180.0, 0.0)
+
+[node name="Spawn223" type="Marker3D" parent="Sections/S5/YagnaEncounter/Wave3"]
+position = Vector3(-16.0, 0.0, -280.0)
+script = ExtResource("17_spawn_point")
+enemy_scene = ExtResource("9_grunt")
+rotation_degrees = Vector3(0.0, 135.0, 0.0)
+
+[node name="Spawn224" type="Marker3D" parent="Sections/S5/YagnaEncounter/Wave3"]
+position = Vector3(16.0, 0.0, -280.0)
+script = ExtResource("17_spawn_point")
+enemy_scene = ExtResource("9_grunt")
+rotation_degrees = Vector3(0.0, -135.0, 0.0)
+
+[node name="Spawn225" type="Marker3D" parent="Sections/S5/YagnaEncounter/Wave3"]
+position = Vector3(0.0, 0.0, -248.0)
+script = ExtResource("17_spawn_point")
+enemy_scene = ExtResource("9_grunt")
+rotation_degrees = Vector3(0.0, 0.0, 0.0)
+
+[node name="Spawn226" type="Marker3D" parent="Sections/S5/YagnaEncounter/Wave3"]
+position = Vector3(-18.0, 0.0, -286.0)
+script = ExtResource("17_spawn_point")
+enemy_scene = ExtResource("10_archer")
+rotation_degrees = Vector3(0.0, 150.0, 0.0)
+
+[node name="Boss" type="Node3D" parent="Sections/S5"]
+script = ExtResource("20_boss_encounter")
+tataka_path = NodePath("Tataka")
+intro_lines = PackedStringArray("Little prince of Ayodhya... you trespass in MY forest.", "I will grind your bones into the ash of that fire!")
+
+[node name="Tataka" parent="Sections/S5/Boss" instance=ExtResource("12_tataka")]
+position = Vector3(0.0, 0.0, -280.0)
+
+[node name="AddSpawns" type="Node3D" parent="Sections/S5/Boss"]
+
+[node name="Add1" type="Marker3D" parent="Sections/S5/Boss/AddSpawns"]
+position = Vector3(-15.0, 0.0, -285.0)
+
+[node name="Add2" type="Marker3D" parent="Sections/S5/Boss/AddSpawns"]
+position = Vector3(15.0, 0.0, -285.0)
+
+[node name="Add3" type="Marker3D" parent="Sections/S5/Boss/AddSpawns"]
+position = Vector3(-20.0, 0.0, -262.0)
+
+[node name="Add4" type="Marker3D" parent="Sections/S5/Boss/AddSpawns"]
+position = Vector3(20.0, 0.0, -262.0)
+
+[node name="Torch227" parent="Sections/S5" instance=ExtResource("1_torch")]
+position = Vector3(12.12, 0.0, -255.0)
+
+[node name="Torch228" parent="Sections/S5" instance=ExtResource("1_torch")]
+position = Vector3(0.0, 0.0, -248.0)
+
+[node name="Torch229" parent="Sections/S5" instance=ExtResource("1_torch")]
+position = Vector3(-12.12, 0.0, -255.0)
+
+[node name="Torch230" parent="Sections/S5" instance=ExtResource("1_torch")]
+position = Vector3(-12.12, 0.0, -269.0)
+
+[node name="Torch231" parent="Sections/S5" instance=ExtResource("1_torch")]
+position = Vector3(-0.0, 0.0, -276.0)
+
+[node name="Torch232" parent="Sections/S5" instance=ExtResource("1_torch")]
+position = Vector3(12.12, 0.0, -269.0)
+
+[node name="Herb233" parent="Sections/S5" instance=ExtResource("5_healing_herb")]
+position = Vector3(-20.0, 0.0, -244.0)
+
+[node name="Herb234" parent="Sections/S5" instance=ExtResource("5_healing_herb")]
+position = Vector3(20.0, 0.0, -244.0)
+
+[node name="Player" parent="." instance=ExtResource("13_player")]
+position = Vector3(0.0, 0.0, 0.0)
+
+[node name="CameraRig" type="Node3D" parent="."]
+script = ExtResource("21_camera_rig")
+target_path = NodePath("../Player")
+
+[node name="Camera3D" type="Camera3D" parent="CameraRig"]
+fov = 60.0
+far = 140.0
+
+[node name="HUD" type="CanvasLayer" parent="."]
+script = ExtResource("22_hud")
