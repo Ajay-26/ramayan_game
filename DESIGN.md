@@ -74,20 +74,33 @@ All enemies die in an **ash and ember burst**.
 | 3 | **Ravine:** archers on ledges, explosive pots, fire arrows from torches | Bow | 4 min |
 | 4 | **Ruined shrine:** Vishwamitra grants the chakra. Bell/switch puzzle, then a brute fight | Chakra | 4 min |
 | 5 | **Yagna defense:** night falls. Waves of mixed enemies while the sacred fire burns. The altar has its own health bar | Everything, astra | 4 min |
-| 6 | **Boss: Tataka.** P1 slams and boulders. P2 summons grunts. P3 enraged in a burning arena | Mastery | 5 min |
+| 6 | **Boss: Tataka.** Five stages, ground and sky (see below) | Mastery | 8–12 min |
 | 7 | **Ending card:** "To be continued…" plus a feedback link | — | — |
+
+### Tataka, Rider of the Storm (boss)
+Tataka attacks from the clouds. A long, Souls-style fight in **five stages**, each a fifth of her health bar (marked on the bar). Burst damage can't skip a stage: her health stops at the line and she changes, invulnerable, with a banner and a line from Vishwamitra. No checkpoints mid-fight by default (`stage_checkpoints` on the Boss node turns them on); healing herbs sprout at the start of stages 3 and 5.
+
+| Stage | Name | What she does | How Rama answers |
+|---|---|---|---|
+| 1 | The Demoness | Ground: sweeps, 2-hit strings, slams, a stomp if Rama hides behind her, boulder throws, leaps across the arena onto a marked spot | Dodge the telegraph, punish the recovery, stagger her with damage |
+| 2 | Storm-Rider | Takes to the sky between ground bouts. Her shadow hunts Rama, then stops, then she dives; low swoops across a marked lane; burning stones from the clouds; demon fire orbs | Bow: enough arrows knock her out of the sky; she crashes and takes extra damage |
+| 3 | The Brood | Ground, quicker: 3-hit strings, delayed slams, charges (hit a wall and she's dazed), summons rakshasas | Crowd control, chakra, astra |
+| 4 | Maya | Hides in a low storm-cloud deck, unseen and untouchable. Lightning reveals her for a moment; she shows herself to dive and swoop | Watch the sky, shoot during reveals and after attacks |
+| 5 | Fury | Enraged: everything faster, demon fire on the ground, short flights for a dive | Everything. At zero she kneels: **takedown** for the final blow |
+
+Every attack has a wind-up and a ground telegraph (circle, lane, or a hunting shadow). The storm builds through the fight: cloud deck, rain, darkness, lightning.
 
 Support systems: health bar, astra meter, glowing healing herbs as pickups, a checkpoint at each beat.
 
 ## Art Direction
-- **Look:** cel-shaded anime. A custom toon shader (2–3 tone light ramp, rim light, ink outlines) applied to **every** asset so mixed sources look unified.
-- **Outfits:** inspired by traditional Indian royal and ascetic attire, in the spirit of 1992-era Indo-Japanese anime. **We make our own designs**; we don't copy that film's character art.
+- **Look:** grim, cinematic mid-2000s action game: dark, high-contrast scenes with deep shadows, heavy soft bloom on fire and divine light, thick colored fog, and a stormy night sky. A full-screen grade (`shaders/cinematic_grade.gdshader`) crushes the blacks, desaturates the midtones, and splits the color: cold slate-teal shadows, warm bronze highlights. Characters get a bright rim light so they read against the dark. We make our own designs and don't copy any existing game's characters or art.
+- **Outfits:** inspired by traditional Indian royal and ascetic attire.
   - Rama: blue skin, golden mukut and ornaments, yellow/saffron dhoti, angavastram, bow across the back
   - Vishwamitra: ascetic, white beard, saffron robes, rudraksha beads
   - Rakshasas: dark rough skin, horns, tusks, crude bone and iron armor, glowing eyes
   - Tataka: towering, wild hair, ash-grey skin, fire-orange eyes, jewelry of bones
-- **Palette:** deep blue and violet night, orange firelight, Rama in gold and blue.
-- **Grit:** ash and embers in the air, smoke, scorched ground, slight desaturation, film grain, vignette.
+- **Palette:** cold moonlit slate and storm grey, hot orange firelight, Rama in gold and blue.
+- **Grit:** ash and embers drifting in the air, rain and lightning in the storm, smoke, scorched ground, film grain, vignette.
 
 ## Asset Pipeline
 | Asset | Source | Who |

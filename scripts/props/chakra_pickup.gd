@@ -30,6 +30,7 @@ func _on_body_entered(body: Node3D) -> void:
 	if player == null:
 		return
 	player.unlock_chakra()
+	Sfx.play("pickup")
 	FX.divine_blast(chakra_visual.global_position - Vector3.UP, 3.0)
 	FX.hitstop(0.1)
 	var hud := get_tree().get_first_node_in_group("hud")

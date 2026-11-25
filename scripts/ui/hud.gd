@@ -1,7 +1,8 @@
 extends CanvasLayer
 ## On-screen UI: health and astra bars, chakra status, lock-on reticle, bow
 ## charge, takedown prompt, story captions, banners, objective and boss bars,
-## pause menu, death screen, and the gritty vignette/grain overlay.
+## pause menu, death screen, and the full-screen cinematic grade (color,
+## vignette, grain, hurt pulse, lightning flash).
 ## Built in code to keep the greybox simple; it gets a proper art pass later.
 
 const GOLD := Color(1.0, 0.78, 0.3)
@@ -26,6 +27,9 @@ var _objective_bar: ProgressBar
 var _boss_box: VBoxContainer
 var _boss_bar: ProgressBar
 var _boss_label: Label
+var _boss_stage_label: Label
+var _boss_notches: BarNotches
+var _boss_pointer: BossPointer
 var _fps: Label
 var _reticle: Reticle
 var _crosshair: Crosshair
@@ -147,11 +151,22 @@ func show_boss(enemy: Enemy) -> void:
 	_boss_bar.max_value = enemy.max_health
 	_boss_bar.value = enemy.health
 	_boss_box.visible = true
+	# Stage lines on the bar, for bosses fought in stages.
+	var stages: int = enemy.get_script().get_script_constant_map().get("STAGE_COUNT", 1)
+	_boss_notches.segments = stages
+	_boss_notches.queue_redraw()
+	_boss_stage_label.visible = enemy.has_method("stage_name")
+
+
+## White-blue wash over the screen for lightning (0..1).
+func set_screen_flash(amount: float) -> void:
+	_overlay_mat.set_shader_parameter("flash_amount", amount)
 
 
 func hide_boss() -> void:
 	_boss = null
 	_boss_box.visible = false
+	_boss_pointer.visible = false
 
 
 # --- Updates ----------------------------------------------------------------
@@ -184,7 +199,8 @@ func _update_player_ui() -> void:
 	_ability_label.text = "    ".join(parts)
 
 	if _player.takedown_candidate and not _player.is_dead():
-		_prompt.text = "LMB / F  —  Takedown"
+		var final_blow := _player.takedown_candidate == _boss
+		_prompt.text = "LMB / F  —  Strike the final blow" if final_blow else "LMB / F  —  Takedown"
 		_prompt.visible = true
 	else:
 		_prompt.visible = false
@@ -236,8 +252,32 @@ func _update_objective() -> void:
 
 
 func _update_boss() -> void:
-	if _boss and is_instance_valid(_boss):
-		_boss_bar.value = maxf(_boss.health, 0.0)
+	if _boss == null or not is_instance_valid(_boss):
+		_boss_pointer.visible = false
+		return
+	_boss_bar.value = maxf(_boss.health, 0.0)
+	if _boss_stage_label.visible:
+		var roman := ["", "I", "II", "III", "IV", "V"]
+		var stage: int = _boss.get("stage")
+		_boss_stage_label.text = "%s  ·  %s" % [roman[clampi(stage, 0, 5)], _boss.call("stage_name")]
+	# Arrow at the screen edge toward the boss when she's out of view (in the sky).
+	var cam := get_viewport().get_camera_3d()
+	_boss_pointer.visible = false
+	if cam and _boss.is_targetable():
+		var point := _boss.aim_point()
+		var screen := get_viewport().get_visible_rect().size
+		var on_screen := not cam.is_position_behind(point) and Rect2(Vector2.ZERO, screen).grow(-40).has_point(cam.unproject_position(point))
+		if not on_screen:
+			var local := cam.global_transform.affine_inverse() * point
+			var dir := Vector2(local.x, -local.y)
+			if dir.length() < 0.01:
+				dir = Vector2.UP
+			dir = dir.normalized()
+			var half := screen * 0.5 - Vector2(60, 60)
+			var scale_to_edge := minf(half.x / maxf(absf(dir.x), 0.001), half.y / maxf(absf(dir.y), 0.001))
+			_boss_pointer.position = screen * 0.5 + dir * scale_to_edge
+			_boss_pointer.rotation = dir.angle()
+			_boss_pointer.visible = true
 
 
 func _set_paused(paused: bool) -> void:
@@ -255,7 +295,7 @@ func _build() -> void:
 	overlay.set_anchors_preset(Control.PRESET_FULL_RECT)
 	overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_overlay_mat = ShaderMaterial.new()
-	_overlay_mat.shader = load("res://shaders/vignette_grain.gdshader")
+	_overlay_mat.shader = load("res://shaders/cinematic_grade.gdshader")
 	overlay.material = _overlay_mat
 	add_child(overlay)
 
@@ -315,7 +355,18 @@ func _build() -> void:
 	_boss_bar = _bar(Color(0.75, 0.12, 0.08), Color(0.05, 0.03, 0.05, 0.85), Vector2.ZERO, Vector2(720, 18))
 	_boss_bar.custom_minimum_size = Vector2(720, 18)
 	_boss_box.add_child(_boss_bar)
+	_boss_notches = BarNotches.new()
+	_boss_notches.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_boss_bar.add_child(_boss_notches)
+	_boss_stage_label = _label("", 15, Color(0.95, 0.82, 0.62))
+	_boss_stage_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_boss_stage_label.visible = false
+	_boss_box.add_child(_boss_stage_label)
+	_boss_box.offset_top = -100
 	add_child(_boss_box)
+	_boss_pointer = BossPointer.new()
+	_boss_pointer.visible = false
+	add_child(_boss_pointer)
 
 	_caption_box = PanelContainer.new()
 	var caption_style := StyleBoxFlat.new()
@@ -473,3 +524,33 @@ class Reticle:
 		if charge >= 0.0:
 			var c := Color(1, 1, 1, 0.95) if charge >= 1.0 else Color(1, 0.6, 0.2, 0.95)
 			draw_arc(Vector2.ZERO, 22.0, -PI / 2.0, -PI / 2.0 + TAU * charge, 32, c, 4.0)
+
+
+## Thin dark lines across a bar, splitting it into equal segments (boss stages).
+class BarNotches:
+	extends Control
+
+	var segments := 1
+
+	func _init() -> void:
+		mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	func _draw() -> void:
+		for i in range(1, segments):
+			var x := size.x * float(i) / segments
+			draw_line(Vector2(x, 0), Vector2(x, size.y), Color(0, 0, 0, 0.85), 3.0)
+			draw_line(Vector2(x, 0), Vector2(x, size.y), Color(1.0, 0.78, 0.3, 0.7), 1.0)
+
+
+## Arrow at the screen edge pointing toward an off-screen boss.
+class BossPointer:
+	extends Control
+
+	func _init() -> void:
+		mouse_filter = Control.MOUSE_FILTER_IGNORE
+
+	func _draw() -> void:
+		var tip := PackedVector2Array([Vector2(18, 0), Vector2(-10, -12), Vector2(-4, 0), Vector2(-10, 12)])
+		draw_colored_polygon(tip, Color(0, 0, 0, 0.6))
+		var inner := PackedVector2Array([Vector2(14, 0), Vector2(-7, -9), Vector2(-2, 0), Vector2(-7, 9)])
+		draw_colored_polygon(inner, Color(1, 0.45, 0.2, 0.95))

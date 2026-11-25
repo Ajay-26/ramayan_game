@@ -5,7 +5,7 @@ extends StaticBody3D
 signal health_changed(current: float, maximum: float)
 signal destroyed
 
-@export var max_health := 300.0
+@export var max_health := 450.0
 
 var health := 0.0
 var _destroyed := false
@@ -17,6 +17,16 @@ var _destroyed := false
 func _ready() -> void:
 	add_to_group("objective")
 	health = max_health
+	# The sacred fire crackles; you hear it as you come near.
+	var fire := AudioStreamPlayer3D.new()
+	fire.name = "FireSound"
+	fire.stream = Sfx.stream("fire_loop")
+	fire.unit_size = 4.0
+	fire.max_distance = 30.0
+	fire.volume_db = -6.0
+	fire.position = Vector3.UP * 1.5
+	add_child(fire)
+	fire.play()
 
 
 func is_destroyed() -> bool:

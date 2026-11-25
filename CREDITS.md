@@ -11,3 +11,6 @@ Files used (`assets/`):
 - `metal_*.tres`, `scalemail.tres`, `Tiny*.png` (armor materials used by the mannequin)
 
 Everything else (code, levels, effects, UI) was made for this project.
+
+## Audio
+All sound effects, ambience and music are synthesized from scratch by `tools/make_sounds.py` for this project (no third-party audio).

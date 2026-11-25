@@ -12,6 +12,9 @@ const LIB_NAME := "melee"
 ## Average color of the mannequin's skin texture, used to paint "bare skin".
 const SKIN_AVERAGE := Color(0.88, 0.656, 0.621)
 const MUSCLE_SHADER := preload("res://shaders/muscle_skin.gdshader")
+## Silhouette rim light on every body material (see _add_rim).
+const RIM := 0.55
+const RIM_TINT := 0.35
 
 @export var skin_tint := Color(1, 1, 1)
 @export var cloth_tint := Color(1, 1, 1)
@@ -131,6 +134,8 @@ func _apply_looks() -> void:
 						muscles.shader = MUSCLE_SHADER
 						muscles.set_shader_parameter("skin_color", SKIN_AVERAGE * skin_tint)
 						muscles.set_shader_parameter("definition", definition)
+						muscles.set_shader_parameter("rim_amount", RIM)
+						muscles.set_shader_parameter("rim_tint_amount", RIM_TINT)
 						mesh.set_surface_override_material(1, muscles)
 					else:
 						_tint(mesh, 1, cloth_tint, true)
@@ -176,4 +181,12 @@ func _tint(mesh: MeshInstance3D, surface: int, color: Color, replace: bool = fal
 	mat.albedo_color = color if replace else source.albedo_color * color
 	if replace:
 		mat.albedo_texture = null
+	_add_rim(mat)
 	mesh.set_surface_override_material(surface, mat)
+
+
+## A bright rim along the silhouette, so figures pop out of the dark scenery.
+static func _add_rim(mat: BaseMaterial3D) -> void:
+	mat.rim_enabled = true
+	mat.rim = RIM
+	mat.rim_tint = RIM_TINT

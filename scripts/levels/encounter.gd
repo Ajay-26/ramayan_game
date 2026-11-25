@@ -67,6 +67,7 @@ func start() -> void:
 		return
 	_started = true
 	started.emit()
+	Sfx.music("music_battle")
 	var hud := get_tree().get_first_node_in_group("hud")
 	if hud and start_banner != "":
 		hud.show_banner(start_banner)
@@ -151,3 +152,4 @@ func _finish() -> void:
 	if gate:
 		gate.open()
 	completed.emit()
+	Sfx.music("music_calm")

@@ -127,6 +127,7 @@ func explosion(pos: Vector3, radius: float) -> void:
 	shockwave(pos, radius, Color(1, 0.55, 0.2, 0.9))
 	_flash_light(pos + Vector3.UP, Color(1, 0.5, 0.15), 8.0, 0.5)
 	add_trauma(0.5)
+	Sfx.play("explosion", pos, 0.0, 0.12)
 
 
 ## Golden divine blast (astra).
@@ -172,6 +173,64 @@ func telegraph(pos: Vector3, radius: float, duration: float, color := Color(1, 0
 	var tween := root.create_tween()
 	tween.tween_property(disc, "scale", Vector3(radius, 1.0, radius), duration)
 	tween.tween_callback(root.queue_free)
+
+
+## Ground warning for a straight rush (Tataka's swoop): a red strip from
+## `from` to `to` that fills along its length. Frees itself.
+func telegraph_line(from: Vector3, to: Vector3, width: float, duration: float, color := Color(1, 0.25, 0.1, 0.5)) -> void:
+	var flat_to := Vector3(to.x, from.y, to.z)
+	var length := from.distance_to(flat_to)
+	if length < 0.1:
+		return
+	var root := Node3D.new()
+	_root().add_child(root)
+	root.global_position = from + Vector3.UP * 0.08
+	root.look_at(flat_to + Vector3.UP * 0.08, Vector3.UP)
+	var edge_mat := _telegraph_material(color)
+	var fill_mat := _telegraph_material(Color(color.r, color.g, color.b, color.a * 0.5))
+	for side in [-1.0, 1.0]:
+		var edge := _flat_box(Vector3(0.12, 0.02, length), edge_mat)
+		edge.position = Vector3(side * width * 0.5, 0, -length * 0.5)
+		root.add_child(edge)
+	var fill := _flat_box(Vector3(width, 0.02, 1.0), fill_mat)
+	fill.position = Vector3(0, 0, -0.005)
+	fill.scale = Vector3(1, 1, 0.01)
+	root.add_child(fill)
+	var tween := root.create_tween().set_parallel(true)
+	tween.tween_property(fill, "scale:z", length, duration)
+	tween.tween_property(fill, "position:z", -length * 0.5, duration)
+	tween.chain().tween_callback(root.queue_free)
+
+
+## A dark shadow with a red ring that a script moves around (Tataka's dive
+## follows Rama with it). Free it yourself.
+func tracking_marker(radius: float, color := Color(1, 0.25, 0.1, 0.6)) -> Node3D:
+	var root := Node3D.new()
+	var shadow_mat := StandardMaterial3D.new()
+	shadow_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	shadow_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	shadow_mat.albedo_color = Color(0, 0, 0, 0.55)
+	shadow_mat.albedo_texture = _soft_texture
+	var shadow := MeshInstance3D.new()
+	var quad := PlaneMesh.new()
+	quad.size = Vector2(2, 2)
+	quad.material = shadow_mat
+	shadow.mesh = quad
+	shadow.scale = Vector3(radius, 1, radius) * 1.3
+	shadow.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	root.add_child(shadow)
+	var ring_mesh := TorusMesh.new()
+	ring_mesh.inner_radius = 0.9
+	ring_mesh.outer_radius = 1.0
+	ring_mesh.material = _telegraph_material(color)
+	var ring := MeshInstance3D.new()
+	ring.name = "Ring"
+	ring.mesh = ring_mesh
+	ring.scale = Vector3(radius, 0.05, radius)
+	ring.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	root.add_child(ring)
+	_root().add_child(root)
+	return root
 
 
 # --- Internals --------------------------------------------------------------
@@ -225,6 +284,25 @@ func _flash_light(pos: Vector3, color: Color, energy: float, duration: float) ->
 	var tween := light.create_tween()
 	tween.tween_property(light, "light_energy", 0.0, duration)
 	tween.tween_callback(light.queue_free)
+
+
+func _telegraph_material(color: Color) -> StandardMaterial3D:
+	var mat := StandardMaterial3D.new()
+	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	mat.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+	mat.albedo_color = color
+	return mat
+
+
+func _flat_box(size: Vector3, mat: Material) -> MeshInstance3D:
+	var box := BoxMesh.new()
+	box.size = size
+	box.material = mat
+	var mesh := MeshInstance3D.new()
+	mesh.mesh = box
+	mesh.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	return mesh
 
 
 func _ramp(colors: Array) -> Gradient:

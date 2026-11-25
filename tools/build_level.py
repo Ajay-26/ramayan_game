@@ -132,15 +132,15 @@ def build_torch():
     script = s.ext_res("Script", "res://scripts/props/torch.gd")
     wood = mat(s, col(0.22, 0.14, 0.08))
     iron = mat(s, col(0.2, 0.2, 0.22), 0.5, 0.7)
-    flame = mat(s, col(1, 0.55, 0.15), unshaded=True)
+    flame = mat(s, col(2.6, 1.3, 0.4), unshaded=True)
     ember_mat = s.sub_res("StandardMaterial3D", shading_mode=0, transparency=1, blend_mode=1,
                           billboard_mode=3, vertex_color_use_as_albedo=True, albedo_color=col(1.6, 1.6, 1.6))
     s.node("Torch", "Node3D", script=script)
     mesh_node(s, "Pole", ".", s.sub_res("CylinderMesh", material=wood, top_radius=0.06, bottom_radius=0.09, height=2.3), (0, 1.15, 0))
     mesh_node(s, "Bowl", ".", s.sub_res("CylinderMesh", material=iron, top_radius=0.22, bottom_radius=0.1, height=0.2), (0, 2.3, 0))
     mesh_node(s, "Flame", ".", s.sub_res("SphereMesh", material=flame, radius=0.16, height=0.42), (0, 2.5, 0), shadow=False)
-    s.node("Light", "OmniLight3D", ".", position=v3(0, 2.7, 0), light_color=col(1, 0.55, 0.22),
-           light_energy=2.2, omni_range=9.0)
+    s.node("Light", "OmniLight3D", ".", position=v3(0, 2.7, 0), light_color=col(1, 0.5, 0.18),
+           light_energy=3.2, omni_range=11.0, omni_attenuation=1.4)
     ramp = s.sub_res("Gradient", offsets="PackedFloat32Array(0, 0.3, 1)",
                      colors="PackedColorArray(1, 0.8, 0.4, 1, 1, 0.4, 0.1, 0.9, 0.4, 0.05, 0, 0)")
     s.node("Embers", "CPUParticles3D", ".", position=v3(0, 2.6, 0),
@@ -309,6 +309,8 @@ class Level:
             "stone_shader": s.ext_res("Shader", "res://shaders/stone_blocks.gdshader"),
             "rock_shader": s.ext_res("Shader", "res://shaders/rock.gdshader"),
             "bark_shader": s.ext_res("Shader", "res://shaders/bark.gdshader"),
+            "sky_shader": s.ext_res("Shader", "res://shaders/storm_sky.gdshader"),
+            "atmosphere_gd": s.ext_res("Script", "res://scripts/world/atmosphere.gd"),
         }
         grad = s.sub_res("Gradient", colors="PackedColorArray(0.55, 0.55, 0.55, 1, 1, 1, 1, 1)")
         noise = s.sub_res("FastNoiseLite", frequency=0.04)
@@ -538,24 +540,31 @@ class Level:
     def build(self):
         s = self.s
         r = self.res
-        # Evening: deep blue sky, rose-violet glow on the horizon, soft cool light.
-        sky_mat = s.sub_res("ProceduralSkyMaterial", sky_top_color=col(0.09, 0.12, 0.3),
-                            sky_horizon_color=col(0.72, 0.42, 0.5), ground_bottom_color=col(0.05, 0.06, 0.07),
-                            ground_horizon_color=col(0.35, 0.3, 0.4), sun_angle_max=10.0, sun_curve=0.1)
-        sky = s.sub_res("Sky", sky_material=sky_mat)
+        # Stormy night: heavy clouds over a dim moon, the horizon underlit by
+        # distant fires. Dark, contrasty and foggy, with strong bloom on fire
+        # and divine light; hud.gd's cinematic grade does the final color.
+        cloud_noise = s.sub_res("FastNoiseLite", frequency=0.006, fractal_octaves=5, fractal_gain=0.55)
+        cloud_tex = s.sub_res("NoiseTexture2D", width=512, height=512, seamless=True, noise=cloud_noise)
+        sky_mat = s.sub_res("ShaderMaterial", shader=r["sky_shader"], **{"shader_parameter/clouds": cloud_tex})
+        sky = s.sub_res("Sky", sky_material=sky_mat, radiance_size=0)
         env = s.sub_res("Environment", background_mode=2, sky=sky, ambient_light_source=2,
-                        ambient_light_color=col(0.48, 0.53, 0.68), ambient_light_energy=1.0,
-                        tonemap_mode=3, tonemap_exposure=1.1, glow_enabled=True, glow_intensity=0.6,
-                        glow_bloom=0.04, fog_enabled=True, fog_light_color=col(0.3, 0.34, 0.48),
-                        fog_density=0.014, fog_sky_affect=0.25, adjustment_enabled=True,
-                        adjustment_contrast=1.08, adjustment_saturation=1.05)
+                        ambient_light_color=col(0.36, 0.37, 0.45), ambient_light_energy=1.1,
+                        reflected_light_source=1,
+                        tonemap_mode=3, tonemap_exposure=1.15, tonemap_white=6.0,
+                        glow_enabled=True, glow_intensity=0.9, glow_strength=1.1, glow_bloom=0.08,
+                        glow_blend_mode=1, glow_hdr_threshold=0.85, glow_hdr_scale=2.2,
+                        **{"glow_levels/1": 0.0, "glow_levels/2": 0.5, "glow_levels/3": 1.0,
+                           "glow_levels/4": 0.8, "glow_levels/5": 1.0, "glow_levels/6": 0.6},
+                        fog_enabled=True, fog_light_color=col(0.12, 0.13, 0.16), fog_density=0.019,
+                        fog_sky_affect=0.55, fog_height=0.6, fog_height_density=0.12)
 
         s.node("Siddhashrama", "Node3D", script=r["level_gd"])
         s.node("WorldEnvironment", "WorldEnvironment", ".", environment=env)
-        # Low evening sun: soft rose light, long shadows through the trees.
-        s.node("Sun", "DirectionalLight3D", ".", rotation_degrees=v3(-30, -35, 0), light_color=col(1.0, 0.78, 0.74),
-               light_energy=1.05, shadow_enabled=True, shadow_opacity=0.75, shadow_blur=1.5,
+        # Cold moonlight through the clouds: long, hard shadows.
+        s.node("Sun", "DirectionalLight3D", ".", rotation_degrees=v3(-42, -35, 0), light_color=col(0.62, 0.7, 0.88),
+               light_energy=1.05, shadow_enabled=True, shadow_opacity=0.85, shadow_blur=1.2,
                directional_shadow_max_distance=45.0)
+        s.node("Atmosphere", "Node3D", ".", script=r["atmosphere_gd"])
         s.node("NavRegion", "NavigationRegion3D", ".", navigation_mesh=r["navmesh"])
         s.node("Geometry", "Node3D", "NavRegion")
         s.node("Sections", "Node3D", ".")
@@ -756,6 +765,10 @@ class Level:
                                "I will grind your bones into the ash of that fire!",
                            ]))
         self.s.node("Tataka", None, boss, instance=self.res["tataka"], position=v3(0, 0, -280))
+        self.s.node("ArenaCenter", "Marker3D", boss, position=v3(0, 0, -265))
+        herbs = self.s.node("HerbSpawns", "Node3D", boss)
+        for i, (x, z) in enumerate(((-19, -248), (19, -248), (-19, -286), (19, -286))):
+            self.s.node(f"Herb{i + 1}", "Marker3D", herbs, position=v3(x, 0, z))
         adds = self.s.node("AddSpawns", "Node3D", boss)
         for i, (x, z) in enumerate(((-15, -285), (15, -285), (-20, -262), (20, -262))):
             self.s.node(f"Add{i + 1}", "Marker3D", adds, position=v3(x, 0, z))

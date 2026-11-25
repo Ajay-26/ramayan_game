@@ -2,7 +2,7 @@ extends Node3D
 ## Standing torch: flickering firelight. Rama's arrows that fly through the
 ## flame catch fire (group "fire_source").
 
-@export var base_energy := 2.2
+@export var base_energy := 3.2
 @export var flicker_amount := 0.18
 
 var _time := randf() * 100.0

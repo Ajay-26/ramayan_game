@@ -30,6 +30,8 @@
 [ext_resource type="Shader" path="res://shaders/stone_blocks.gdshader" id="28_stone_blocks"]
 [ext_resource type="Shader" path="res://shaders/rock.gdshader" id="29_rock"]
 [ext_resource type="Shader" path="res://shaders/bark.gdshader" id="30_bark"]
+[ext_resource type="Shader" path="res://shaders/storm_sky.gdshader" id="31_storm_sky"]
+[ext_resource type="Script" path="res://scripts/world/atmosphere.gd" id="32_atmosphere"]
 
 [sub_resource type="Gradient" id="Gradient_1"]
 colors = PackedColorArray(0.55, 0.55, 0.55, 1, 1, 1, 1, 1)
@@ -125,198 +127,220 @@ albedo_color = Color(1.0, 0.55, 0.1, 1.0)
 roughness = 0.9
 cull_mode = 2
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_20"]
-sky_top_color = Color(0.09, 0.12, 0.3, 1.0)
-sky_horizon_color = Color(0.72, 0.42, 0.5, 1.0)
-ground_bottom_color = Color(0.05, 0.06, 0.07, 1.0)
-ground_horizon_color = Color(0.35, 0.3, 0.4, 1.0)
-sun_angle_max = 10.0
-sun_curve = 0.1
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_20"]
+frequency = 0.006
+fractal_octaves = 5
+fractal_gain = 0.55
 
-[sub_resource type="Sky" id="Sky_21"]
-sky_material = SubResource("ProceduralSkyMaterial_20")
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_21"]
+width = 512
+height = 512
+seamless = true
+noise = SubResource("FastNoiseLite_20")
 
-[sub_resource type="Environment" id="Environment_22"]
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_22"]
+shader = ExtResource("31_storm_sky")
+shader_parameter/clouds = SubResource("NoiseTexture2D_21")
+
+[sub_resource type="Sky" id="Sky_23"]
+sky_material = SubResource("ShaderMaterial_22")
+radiance_size = 0
+
+[sub_resource type="Environment" id="Environment_24"]
 background_mode = 2
-sky = SubResource("Sky_21")
+sky = SubResource("Sky_23")
 ambient_light_source = 2
-ambient_light_color = Color(0.48, 0.53, 0.68, 1.0)
-ambient_light_energy = 1.0
+ambient_light_color = Color(0.36, 0.37, 0.45, 1.0)
+ambient_light_energy = 1.1
+reflected_light_source = 1
 tonemap_mode = 3
-tonemap_exposure = 1.1
+tonemap_exposure = 1.15
+tonemap_white = 6.0
 glow_enabled = true
-glow_intensity = 0.6
-glow_bloom = 0.04
+glow_intensity = 0.9
+glow_strength = 1.1
+glow_bloom = 0.08
+glow_blend_mode = 1
+glow_hdr_threshold = 0.85
+glow_hdr_scale = 2.2
+glow_levels/1 = 0.0
+glow_levels/2 = 0.5
+glow_levels/3 = 1.0
+glow_levels/4 = 0.8
+glow_levels/5 = 1.0
+glow_levels/6 = 0.6
 fog_enabled = true
-fog_light_color = Color(0.3, 0.34, 0.48, 1.0)
-fog_density = 0.014
-fog_sky_affect = 0.25
-adjustment_enabled = true
-adjustment_contrast = 1.08
-adjustment_saturation = 1.05
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_23"]
-size = Vector3(2.0, 8.0, 44.0)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_24"]
-size = Vector3(2.0, 8.0, 44.0)
+fog_light_color = Color(0.12, 0.13, 0.16, 1.0)
+fog_density = 0.019
+fog_sky_affect = 0.55
+fog_height = 0.6
+fog_height_density = 0.12
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_25"]
-size = Vector3(18.0, 8.0, 2.0)
+size = Vector3(2.0, 8.0, 44.0)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_26"]
-size = Vector3(14.0, 3.0, 3.0)
+size = Vector3(2.0, 8.0, 44.0)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_27"]
-size = Vector3(14.0, 3.0, 3.0)
+size = Vector3(18.0, 8.0, 2.0)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_28"]
-size = Vector3(2.0, 8.0, 40.0)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_29"]
-size = Vector3(2.0, 8.0, 40.0)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_30"]
-size = Vector3(9.0, 8.0, 2.0)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_31"]
-size = Vector3(9.0, 8.0, 2.0)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_32"]
-size = Vector3(32.0, 3.0, 3.0)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_33"]
-size = Vector3(30.0, 3.0, 3.0)
-
-[sub_resource type="PrismMesh" id="PrismMesh_34"]
-size = Vector3(3.2, 2.3, 4.4)
-material = SubResource("StandardMaterial3D_16")
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_35"]
-size = Vector3(2.6, 1.8, 4.4)
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_36"]
-top_radius = 0.05
-bottom_radius = 0.06
-height = 2.6
-material = SubResource("ShaderMaterial_15")
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_37"]
-top_radius = 0.05
-bottom_radius = 0.06
-height = 2.6
-material = SubResource("ShaderMaterial_15")
-
-[sub_resource type="PrismMesh" id="PrismMesh_38"]
-size = Vector3(3.2, 2.3, 4.4)
-material = SubResource("StandardMaterial3D_16")
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_39"]
-size = Vector3(2.6, 1.8, 4.4)
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_40"]
-top_radius = 0.05
-bottom_radius = 0.06
-height = 2.6
-material = SubResource("ShaderMaterial_15")
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_41"]
-top_radius = 0.05
-bottom_radius = 0.06
-height = 2.6
-material = SubResource("ShaderMaterial_15")
-
-[sub_resource type="PrismMesh" id="PrismMesh_42"]
-size = Vector3(3.2, 2.3, 4.4)
-material = SubResource("StandardMaterial3D_16")
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_43"]
-size = Vector3(2.6, 1.8, 4.4)
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_44"]
-top_radius = 0.05
-bottom_radius = 0.06
-height = 2.6
-material = SubResource("ShaderMaterial_15")
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_45"]
-top_radius = 0.05
-bottom_radius = 0.06
-height = 2.6
-material = SubResource("ShaderMaterial_15")
-
-[sub_resource type="PrismMesh" id="PrismMesh_46"]
-size = Vector3(3.2, 2.3, 4.4)
-material = SubResource("StandardMaterial3D_16")
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_47"]
-size = Vector3(2.6, 1.8, 4.4)
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_48"]
-top_radius = 0.05
-bottom_radius = 0.06
-height = 2.6
-material = SubResource("ShaderMaterial_15")
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_49"]
-top_radius = 0.05
-bottom_radius = 0.06
-height = 2.6
-material = SubResource("ShaderMaterial_15")
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_50"]
-size = Vector3(32.0, 3.0, 3.0)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_51"]
-size = Vector3(30.0, 3.0, 4.0)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_52"]
-size = Vector3(28.0, 3.0, 3.0)
-
-[sub_resource type="BoxShape3D" id="BoxShape3D_53"]
 size = Vector3(14.0, 3.0, 3.0)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_29"]
+size = Vector3(14.0, 3.0, 3.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_30"]
+size = Vector3(2.0, 8.0, 40.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_31"]
+size = Vector3(2.0, 8.0, 40.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_32"]
+size = Vector3(9.0, 8.0, 2.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_33"]
+size = Vector3(9.0, 8.0, 2.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_34"]
+size = Vector3(32.0, 3.0, 3.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_35"]
+size = Vector3(30.0, 3.0, 3.0)
+
+[sub_resource type="PrismMesh" id="PrismMesh_36"]
+size = Vector3(3.2, 2.3, 4.4)
+material = SubResource("StandardMaterial3D_16")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_37"]
+size = Vector3(2.6, 1.8, 4.4)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_38"]
+top_radius = 0.05
+bottom_radius = 0.06
+height = 2.6
+material = SubResource("ShaderMaterial_15")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_39"]
+top_radius = 0.05
+bottom_radius = 0.06
+height = 2.6
+material = SubResource("ShaderMaterial_15")
+
+[sub_resource type="PrismMesh" id="PrismMesh_40"]
+size = Vector3(3.2, 2.3, 4.4)
+material = SubResource("StandardMaterial3D_16")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_41"]
+size = Vector3(2.6, 1.8, 4.4)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_42"]
+top_radius = 0.05
+bottom_radius = 0.06
+height = 2.6
+material = SubResource("ShaderMaterial_15")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_43"]
+top_radius = 0.05
+bottom_radius = 0.06
+height = 2.6
+material = SubResource("ShaderMaterial_15")
+
+[sub_resource type="PrismMesh" id="PrismMesh_44"]
+size = Vector3(3.2, 2.3, 4.4)
+material = SubResource("StandardMaterial3D_16")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_45"]
+size = Vector3(2.6, 1.8, 4.4)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_46"]
+top_radius = 0.05
+bottom_radius = 0.06
+height = 2.6
+material = SubResource("ShaderMaterial_15")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_47"]
+top_radius = 0.05
+bottom_radius = 0.06
+height = 2.6
+material = SubResource("ShaderMaterial_15")
+
+[sub_resource type="PrismMesh" id="PrismMesh_48"]
+size = Vector3(3.2, 2.3, 4.4)
+material = SubResource("StandardMaterial3D_16")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_49"]
+size = Vector3(2.6, 1.8, 4.4)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_50"]
+top_radius = 0.05
+bottom_radius = 0.06
+height = 2.6
+material = SubResource("ShaderMaterial_15")
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_51"]
+top_radius = 0.05
+bottom_radius = 0.06
+height = 2.6
+material = SubResource("ShaderMaterial_15")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_52"]
+size = Vector3(32.0, 3.0, 3.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_53"]
+size = Vector3(30.0, 3.0, 4.0)
+
 [sub_resource type="BoxShape3D" id="BoxShape3D_54"]
-size = Vector3(14.0, 3.0, 4.0)
+size = Vector3(28.0, 3.0, 3.0)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_55"]
-size = Vector3(2.0, 8.0, 40.0)
+size = Vector3(14.0, 3.0, 3.0)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_56"]
-size = Vector3(2.0, 8.0, 40.0)
+size = Vector3(14.0, 3.0, 4.0)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_57"]
-size = Vector3(28.0, 3.0, 3.0)
+size = Vector3(2.0, 8.0, 40.0)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_58"]
-size = Vector3(28.0, 3.0, 3.0)
+size = Vector3(2.0, 8.0, 40.0)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_59"]
-size = Vector3(6.0, 3.0, 6.0)
+size = Vector3(28.0, 3.0, 3.0)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_60"]
-size = Vector3(44.0, 3.0, 3.0)
+size = Vector3(28.0, 3.0, 3.0)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_61"]
-size = Vector3(40.0, 3.0, 3.0)
+size = Vector3(6.0, 3.0, 6.0)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_62"]
+size = Vector3(44.0, 3.0, 3.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_63"]
+size = Vector3(40.0, 3.0, 3.0)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_64"]
 size = Vector3(40.0, 3.0, 4.0)
 
 [node name="Siddhashrama" type="Node3D"]
 script = ExtResource("14_level")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_22")
+environment = SubResource("Environment_24")
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
-rotation_degrees = Vector3(-30.0, -35.0, 0.0)
-light_color = Color(1.0, 0.78, 0.74, 1.0)
+rotation_degrees = Vector3(-42.0, -35.0, 0.0)
+light_color = Color(0.62, 0.7, 0.88, 1.0)
 light_energy = 1.05
 shadow_enabled = true
-shadow_opacity = 0.75
-shadow_blur = 1.5
+shadow_opacity = 0.85
+shadow_blur = 1.2
 directional_shadow_max_distance = 45.0
+
+[node name="Atmosphere" type="Node3D" parent="."]
+script = ExtResource("32_atmosphere")
 
 [node name="NavRegion" type="NavigationRegion3D" parent="."]
 navigation_mesh = ExtResource("23_siddhashrama_navmesh")
@@ -368,21 +392,21 @@ position = Vector3(-8.0, 4.0, -14.0)
 collision_mask = 0
 
 [node name="Shape" type="CollisionShape3D" parent="NavRegion/Geometry/Boundary3"]
-shape = SubResource("BoxShape3D_23")
+shape = SubResource("BoxShape3D_25")
 
 [node name="Boundary4" type="StaticBody3D" parent="NavRegion/Geometry"]
 position = Vector3(8.0, 4.0, -14.0)
 collision_mask = 0
 
 [node name="Shape" type="CollisionShape3D" parent="NavRegion/Geometry/Boundary4"]
-shape = SubResource("BoxShape3D_24")
+shape = SubResource("BoxShape3D_26")
 
 [node name="Boundary5" type="StaticBody3D" parent="NavRegion/Geometry"]
 position = Vector3(0.0, 4.0, 7.0)
 collision_mask = 0
 
 [node name="Shape" type="CollisionShape3D" parent="NavRegion/Geometry/Boundary5"]
-shape = SubResource("BoxShape3D_25")
+shape = SubResource("BoxShape3D_27")
 
 [node name="Boulder6" type="Node3D" parent="NavRegion/Geometry"]
 position = Vector3(-4.5, 0.0, -20.0)
@@ -410,7 +434,7 @@ position = Vector3(0.0, 0.0, -6.0)
 position = Vector3(0.0, 1.5, -6.0)
 
 [node name="Shape" type="CollisionShape3D" parent="Sections/S0/CheckpointArea"]
-shape = SubResource("BoxShape3D_26")
+shape = SubResource("BoxShape3D_28")
 
 [node name="Intro" type="Area3D" parent="Sections/S0"]
 position = Vector3(0.0, 1.5, -9.0)
@@ -419,7 +443,7 @@ speaker = "Vishwamitra"
 lines = PackedStringArray("Stay close, Rama. Rakshasas prowl these woods after dark.", "Where you can, move unseen. Press C to sneak.", "Come upon them from behind, and your blades will end them silently.")
 
 [node name="Shape" type="CollisionShape3D" parent="Sections/S0/Intro"]
-shape = SubResource("BoxShape3D_27")
+shape = SubResource("BoxShape3D_29")
 
 [node name="Torch8" parent="Sections/S0" instance=ExtResource("1_torch")]
 position = Vector3(-5.0, 0.0, -16.0)
@@ -472,28 +496,28 @@ position = Vector3(-17.0, 4.0, -56.0)
 collision_mask = 0
 
 [node name="Shape" type="CollisionShape3D" parent="NavRegion/Geometry/Boundary12"]
-shape = SubResource("BoxShape3D_28")
+shape = SubResource("BoxShape3D_30")
 
 [node name="Boundary13" type="StaticBody3D" parent="NavRegion/Geometry"]
 position = Vector3(17.0, 4.0, -56.0)
 collision_mask = 0
 
 [node name="Shape" type="CollisionShape3D" parent="NavRegion/Geometry/Boundary13"]
-shape = SubResource("BoxShape3D_29")
+shape = SubResource("BoxShape3D_31")
 
 [node name="Boundary14" type="StaticBody3D" parent="NavRegion/Geometry"]
 position = Vector3(-12.5, 4.0, -36.0)
 collision_mask = 0
 
 [node name="Shape" type="CollisionShape3D" parent="NavRegion/Geometry/Boundary14"]
-shape = SubResource("BoxShape3D_30")
+shape = SubResource("BoxShape3D_32")
 
 [node name="Boundary15" type="StaticBody3D" parent="NavRegion/Geometry"]
 position = Vector3(12.5, 4.0, -36.0)
 collision_mask = 0
 
 [node name="Shape" type="CollisionShape3D" parent="NavRegion/Geometry/Boundary15"]
-shape = SubResource("BoxShape3D_31")
+shape = SubResource("BoxShape3D_33")
 
 [node name="Battlement16" type="Node3D" parent="NavRegion/Geometry"]
 position = Vector3(-10.6, 0.0, -76.0)
@@ -618,7 +642,7 @@ position = Vector3(0.0, 0.0, -38.0)
 position = Vector3(0.0, 1.5, -38.0)
 
 [node name="Shape" type="CollisionShape3D" parent="Sections/S1/CheckpointArea"]
-shape = SubResource("BoxShape3D_32")
+shape = SubResource("BoxShape3D_34")
 
 [node name="ExitGate" parent="Sections/S1" instance=ExtResource("4_gate")]
 position = Vector3(0.0, 0.0, -76.0)
@@ -630,7 +654,7 @@ speaker = "Vishwamitra"
 lines = PackedStringArray("Three sentries guard the path. Take them unseen if you can.", "Stay out of their sight. Get behind one and strike: Left click or F.")
 
 [node name="Shape" type="CollisionShape3D" parent="Sections/S1/Stealth"]
-shape = SubResource("BoxShape3D_33")
+shape = SubResource("BoxShape3D_35")
 
 [node name="Sentries" type="Node3D" parent="Sections/S1"]
 script = ExtResource("16_encounter")
@@ -847,19 +871,19 @@ collision_mask = 0
 
 [node name="Cloth" type="MeshInstance3D" parent="NavRegion/Geometry/Tent55"]
 position = Vector3(0.0, 1.15, 0.0)
-mesh = SubResource("PrismMesh_34")
+mesh = SubResource("PrismMesh_36")
 
 [node name="Shape" type="CollisionShape3D" parent="NavRegion/Geometry/Tent55"]
 position = Vector3(0.0, 0.9, 0.0)
-shape = SubResource("BoxShape3D_35")
+shape = SubResource("BoxShape3D_37")
 
 [node name="PoleA" type="MeshInstance3D" parent="NavRegion/Geometry/Tent55"]
 position = Vector3(0.0, 1.3, -2.25)
-mesh = SubResource("CylinderMesh_36")
+mesh = SubResource("CylinderMesh_38")
 
 [node name="PoleB" type="MeshInstance3D" parent="NavRegion/Geometry/Tent55"]
 position = Vector3(0.0, 1.3, 2.25)
-mesh = SubResource("CylinderMesh_37")
+mesh = SubResource("CylinderMesh_39")
 
 [node name="Tent56" type="StaticBody3D" parent="NavRegion/Geometry"]
 position = Vector3(11.0, 0.0, -100.0)
@@ -868,19 +892,19 @@ collision_mask = 0
 
 [node name="Cloth" type="MeshInstance3D" parent="NavRegion/Geometry/Tent56"]
 position = Vector3(0.0, 1.15, 0.0)
-mesh = SubResource("PrismMesh_38")
+mesh = SubResource("PrismMesh_40")
 
 [node name="Shape" type="CollisionShape3D" parent="NavRegion/Geometry/Tent56"]
 position = Vector3(0.0, 0.9, 0.0)
-shape = SubResource("BoxShape3D_39")
+shape = SubResource("BoxShape3D_41")
 
 [node name="PoleA" type="MeshInstance3D" parent="NavRegion/Geometry/Tent56"]
 position = Vector3(0.0, 1.3, -2.25)
-mesh = SubResource("CylinderMesh_40")
+mesh = SubResource("CylinderMesh_42")
 
 [node name="PoleB" type="MeshInstance3D" parent="NavRegion/Geometry/Tent56"]
 position = Vector3(0.0, 1.3, 2.25)
-mesh = SubResource("CylinderMesh_41")
+mesh = SubResource("CylinderMesh_43")
 
 [node name="Tent57" type="StaticBody3D" parent="NavRegion/Geometry"]
 position = Vector3(-10.0, 0.0, -116.0)
@@ -889,19 +913,19 @@ collision_mask = 0
 
 [node name="Cloth" type="MeshInstance3D" parent="NavRegion/Geometry/Tent57"]
 position = Vector3(0.0, 1.15, 0.0)
-mesh = SubResource("PrismMesh_42")
+mesh = SubResource("PrismMesh_44")
 
 [node name="Shape" type="CollisionShape3D" parent="NavRegion/Geometry/Tent57"]
 position = Vector3(0.0, 0.9, 0.0)
-shape = SubResource("BoxShape3D_43")
+shape = SubResource("BoxShape3D_45")
 
 [node name="PoleA" type="MeshInstance3D" parent="NavRegion/Geometry/Tent57"]
 position = Vector3(0.0, 1.3, -2.25)
-mesh = SubResource("CylinderMesh_44")
+mesh = SubResource("CylinderMesh_46")
 
 [node name="PoleB" type="MeshInstance3D" parent="NavRegion/Geometry/Tent57"]
 position = Vector3(0.0, 1.3, 2.25)
-mesh = SubResource("CylinderMesh_45")
+mesh = SubResource("CylinderMesh_47")
 
 [node name="Tent58" type="StaticBody3D" parent="NavRegion/Geometry"]
 position = Vector3(12.0, 0.0, -117.0)
@@ -910,19 +934,19 @@ collision_mask = 0
 
 [node name="Cloth" type="MeshInstance3D" parent="NavRegion/Geometry/Tent58"]
 position = Vector3(0.0, 1.15, 0.0)
-mesh = SubResource("PrismMesh_46")
+mesh = SubResource("PrismMesh_48")
 
 [node name="Shape" type="CollisionShape3D" parent="NavRegion/Geometry/Tent58"]
 position = Vector3(0.0, 0.9, 0.0)
-shape = SubResource("BoxShape3D_47")
+shape = SubResource("BoxShape3D_49")
 
 [node name="PoleA" type="MeshInstance3D" parent="NavRegion/Geometry/Tent58"]
 position = Vector3(0.0, 1.3, -2.25)
-mesh = SubResource("CylinderMesh_48")
+mesh = SubResource("CylinderMesh_50")
 
 [node name="PoleB" type="MeshInstance3D" parent="NavRegion/Geometry/Tent58"]
 position = Vector3(0.0, 1.3, 2.25)
-mesh = SubResource("CylinderMesh_49")
+mesh = SubResource("CylinderMesh_51")
 
 [node name="TowerPost59" type="CSGCylinder3D" parent="NavRegion/Geometry"]
 position = Vector3(-15.6, 2.5, -89.1)
@@ -1170,7 +1194,7 @@ position = Vector3(0.0, 0.0, -87.0)
 position = Vector3(0.0, 1.5, -87.0)
 
 [node name="Shape" type="CollisionShape3D" parent="Sections/S2/CheckpointArea"]
-shape = SubResource("BoxShape3D_50")
+shape = SubResource("BoxShape3D_52")
 
 [node name="ExitGate" parent="Sections/S2" instance=ExtResource("4_gate")]
 position = Vector3(0.0, 0.0, -124.0)
@@ -1183,7 +1207,7 @@ start_banner = "Ambush!"
 position = Vector3(0.0, 1.5, -92.0)
 
 [node name="Shape" type="CollisionShape3D" parent="Sections/S2/CampFight/Trigger"]
-shape = SubResource("BoxShape3D_51")
+shape = SubResource("BoxShape3D_53")
 
 [node name="Wave1" type="Node3D" parent="Sections/S2/CampFight"]
 
@@ -1416,7 +1440,7 @@ position = Vector3(0.0, 0.0, -129.0)
 position = Vector3(0.0, 1.5, -134.0)
 
 [node name="Shape" type="CollisionShape3D" parent="Sections/S3/CheckpointArea"]
-shape = SubResource("BoxShape3D_52")
+shape = SubResource("BoxShape3D_54")
 
 [node name="ExitGate" parent="Sections/S3" instance=ExtResource("4_gate")]
 position = Vector3(0.0, 0.0, -182.0)
@@ -1428,7 +1452,7 @@ speaker = "Vishwamitra"
 lines = PackedStringArray("Archers on the cliffs! Hold right click to aim your bow, then left click to loose. Hold it to charge a piercing shot.", "Tab switches your target. An arrow that flies past a torch will catch fire.", "Those clay pots are full of oil. Strike one and it will burst.")
 
 [node name="Shape" type="CollisionShape3D" parent="Sections/S3/Bow"]
-shape = SubResource("BoxShape3D_53")
+shape = SubResource("BoxShape3D_55")
 
 [node name="Ravine" type="Node3D" parent="Sections/S3"]
 script = ExtResource("16_encounter")
@@ -1437,7 +1461,7 @@ script = ExtResource("16_encounter")
 position = Vector3(0.0, 1.5, -138.0)
 
 [node name="Shape" type="CollisionShape3D" parent="Sections/S3/Ravine/Trigger"]
-shape = SubResource("BoxShape3D_54")
+shape = SubResource("BoxShape3D_56")
 
 [node name="Placed" type="Node3D" parent="Sections/S3/Ravine"]
 
@@ -1556,14 +1580,14 @@ position = Vector3(-15.0, 4.0, -210.0)
 collision_mask = 0
 
 [node name="Shape" type="CollisionShape3D" parent="NavRegion/Geometry/Boundary137"]
-shape = SubResource("BoxShape3D_55")
+shape = SubResource("BoxShape3D_57")
 
 [node name="Boundary138" type="StaticBody3D" parent="NavRegion/Geometry"]
 position = Vector3(15.0, 4.0, -210.0)
 collision_mask = 0
 
 [node name="Shape" type="CollisionShape3D" parent="NavRegion/Geometry/Boundary138"]
-shape = SubResource("BoxShape3D_56")
+shape = SubResource("BoxShape3D_58")
 
 [node name="Battlement139" type="Node3D" parent="NavRegion/Geometry"]
 position = Vector3(-9.6, 0.0, -190.0)
@@ -1769,7 +1793,7 @@ position = Vector3(0.0, 0.0, -187.0)
 position = Vector3(0.0, 1.5, -192.0)
 
 [node name="Shape" type="CollisionShape3D" parent="Sections/S4/CheckpointArea"]
-shape = SubResource("BoxShape3D_57")
+shape = SubResource("BoxShape3D_59")
 
 [node name="ExitGate" parent="Sections/S4" instance=ExtResource("4_gate")]
 position = Vector3(0.0, 0.0, -230.0)
@@ -1781,7 +1805,7 @@ speaker = "Vishwamitra"
 lines = PackedStringArray("This shrine is older than Ayodhya. Something divine still rests here.")
 
 [node name="Shape" type="CollisionShape3D" parent="Sections/S4/Shrine"]
-shape = SubResource("BoxShape3D_58")
+shape = SubResource("BoxShape3D_60")
 
 [node name="ChakraPickup" parent="Sections/S4" instance=ExtResource("6_chakra_pickup")]
 position = Vector3(0.0, 0.0, -206.0)
@@ -1796,7 +1820,7 @@ start_banner = "Ambush!"
 position = Vector3(0.0, 1.5, -206.0)
 
 [node name="Shape" type="CollisionShape3D" parent="Sections/S4/ShrineAmbush/Trigger"]
-shape = SubResource("BoxShape3D_59")
+shape = SubResource("BoxShape3D_61")
 
 [node name="Wave1" type="Node3D" parent="Sections/S4/ShrineAmbush"]
 
@@ -2203,7 +2227,7 @@ position = Vector3(0.0, 0.0, -235.0)
 position = Vector3(0.0, 1.5, -240.0)
 
 [node name="Shape" type="CollisionShape3D" parent="Sections/S5/CheckpointArea"]
-shape = SubResource("BoxShape3D_60")
+shape = SubResource("BoxShape3D_62")
 
 [node name="EntryGate" parent="Sections/S5" instance=ExtResource("4_gate")]
 position = Vector3(0.0, 0.0, -238.0)
@@ -2223,7 +2247,7 @@ speaker = "Vishwamitra"
 lines = PackedStringArray("Here, Rama. I begin the rite. The fire must not go out until dawn.")
 
 [node name="Shape" type="CollisionShape3D" parent="Sections/S5/YagnaIntro"]
-shape = SubResource("BoxShape3D_61")
+shape = SubResource("BoxShape3D_63")
 
 [node name="YagnaEncounter" type="Node3D" parent="Sections/S5"]
 script = ExtResource("16_encounter")
@@ -2235,7 +2259,7 @@ lock_gate_path = NodePath("../EntryGate")
 position = Vector3(0.0, 1.5, -244.0)
 
 [node name="Shape" type="CollisionShape3D" parent="Sections/S5/YagnaEncounter/Trigger"]
-shape = SubResource("BoxShape3D_62")
+shape = SubResource("BoxShape3D_64")
 
 [node name="Wave1" type="Node3D" parent="Sections/S5/YagnaEncounter"]
 
@@ -2340,6 +2364,23 @@ intro_lines = PackedStringArray("Little prince of Ayodhya... you trespass in MY 
 
 [node name="Tataka" parent="Sections/S5/Boss" instance=ExtResource("12_tataka")]
 position = Vector3(0.0, 0.0, -280.0)
+
+[node name="ArenaCenter" type="Marker3D" parent="Sections/S5/Boss"]
+position = Vector3(0.0, 0.0, -265.0)
+
+[node name="HerbSpawns" type="Node3D" parent="Sections/S5/Boss"]
+
+[node name="Herb1" type="Marker3D" parent="Sections/S5/Boss/HerbSpawns"]
+position = Vector3(-19.0, 0.0, -248.0)
+
+[node name="Herb2" type="Marker3D" parent="Sections/S5/Boss/HerbSpawns"]
+position = Vector3(19.0, 0.0, -248.0)
+
+[node name="Herb3" type="Marker3D" parent="Sections/S5/Boss/HerbSpawns"]
+position = Vector3(-19.0, 0.0, -286.0)
+
+[node name="Herb4" type="Marker3D" parent="Sections/S5/Boss/HerbSpawns"]
+position = Vector3(19.0, 0.0, -286.0)
 
 [node name="AddSpawns" type="Node3D" parent="Sections/S5/Boss"]
 

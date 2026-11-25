@@ -1,7 +1,7 @@
 extends Area3D
 ## Glowing sanjeevani herb. Walk through it to heal.
 
-@export var amount := 25.0
+@export var amount := 35.0
 
 var _time := randf() * 10.0
 
@@ -25,6 +25,7 @@ func _on_body_entered(body: Node3D) -> void:
 	if player == null or player.is_dead() or player.health >= player.max_health:
 		return
 	player.heal(amount)
+	Sfx.play("heal")
 	FX.shockwave(global_position, 1.5, Color(0.4, 1.0, 0.6, 0.8))
 	var hud := get_tree().get_first_node_in_group("hud")
 	if hud:

@@ -156,6 +156,7 @@ func _strike() -> void:
 		_attack_cooldown = randf_range(0.8, 1.4)
 		return
 	var center := global_position + Vector3.UP + facing() * 1.2
+	Sfx.play("punch_swing", center, -2.0)
 	Combat.damage_in_radius(get_world_3d(), center, 1.0, Combat.LAYER_PLAYER, damage, 7.0, "melee", [get_rid()])
 
 

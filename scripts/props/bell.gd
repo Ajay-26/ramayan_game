@@ -38,6 +38,7 @@ func ring(silent: bool) -> void:
 	if not silent:
 		FX.flash(bell_mesh, Color(1, 0.85, 0.4, 0.6), 0.3)
 		FX.shockwave(bell_mesh.global_position, 2.0, Color(1, 0.85, 0.4, 0.8))
+		Sfx.play("bell", bell_mesh.global_position, 2.0, 0.03)
 		var tween := create_tween()
 		tween.tween_property(bell_mesh, "rotation:z", deg_to_rad(25), 0.12)
 		tween.tween_property(bell_mesh, "rotation:z", deg_to_rad(-18), 0.2)

@@ -23,6 +23,7 @@ func open(instant: bool = false) -> void:
 		return
 	FX.dust(global_position + Vector3.UP * 0.5)
 	FX.add_trauma(0.2)
+	Sfx.play("gate", global_position + Vector3.UP * 2.0)
 	var tween := create_tween()
 	tween.tween_property(self, "position:y", _closed_y - 5.5, 1.4).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 
@@ -33,5 +34,6 @@ func close() -> void:
 	is_open = false
 	collision_layer = Combat.LAYER_WORLD
 	FX.add_trauma(0.2)
+	Sfx.play("slam", global_position + Vector3.UP * 2.0, -4.0)
 	var tween := create_tween()
 	tween.tween_property(self, "position:y", _closed_y, 0.6).set_trans(Tween.TRANS_BOUNCE).set_ease(Tween.EASE_OUT)

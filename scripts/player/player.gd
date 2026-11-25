@@ -30,15 +30,17 @@ const ATTACKS := {
 	"jab": {"damage": 9.0, "startup": 0.1, "recovery": 0.3, "lunge": 3.0, "reach": 1.0, "radius": 1.0, "knockback": 2.5, "hitstop": 0.05, "shake": 0.1, "kind": "light", "anim": "Stab1", "anim_time": 0.6, "sword": false},
 	"cross": {"damage": 10.0, "startup": 0.12, "recovery": 0.32, "lunge": 3.5, "reach": 1.0, "radius": 1.05, "knockback": 3.0, "hitstop": 0.06, "shake": 0.12, "kind": "light", "anim": "ShieldBash", "anim_time": 0.6, "sword": false},
 	"uppercut": {"damage": 17.0, "startup": 0.18, "recovery": 0.5, "lunge": 4.0, "reach": 1.0, "radius": 1.3, "knockback": 9.0, "hitstop": 0.1, "shake": 0.3, "kind": "heavy", "anim": "SlashUppercut", "anim_time": 0.85, "sword": false},
-	"heavy": {"damage": 34.0, "startup": 0.5, "recovery": 0.6, "lunge": 2.5, "reach": 1.5, "radius": 1.6, "knockback": 9.0, "hitstop": 0.12, "shake": 0.4, "kind": "heavy", "anim": "Heavy1", "anim_time": 1.35, "sword": true},
-	"rising": {"damage": 28.0, "startup": 0.3, "recovery": 0.5, "lunge": 4.0, "reach": 1.4, "radius": 1.5, "knockback": 10.0, "hitstop": 0.11, "shake": 0.35, "kind": "heavy", "anim": "Slash1", "anim_time": 0.9, "sword": true},
-	"slam": {"damage": 42.0, "startup": 0.42, "recovery": 0.7, "lunge": 2.0, "reach": 0.8, "radius": 2.6, "knockback": 12.0, "hitstop": 0.14, "shake": 0.55, "kind": "slam", "anim": "HeavyJumpAttack", "anim_time": 1.15, "sword": true, "shockwave": true},
+	"heavy": {"damage": 34.0, "startup": 0.5, "recovery": 0.6, "lunge": 2.5, "reach": 1.5, "radius": 1.6, "knockback": 9.0, "hitstop": 0.07, "shake": 0.4, "kind": "heavy", "anim": "Heavy1", "anim_time": 1.35, "sword": true},
+	"rising": {"damage": 28.0, "startup": 0.3, "recovery": 0.5, "lunge": 4.0, "reach": 1.4, "radius": 1.5, "knockback": 10.0, "hitstop": 0.07, "shake": 0.35, "kind": "heavy", "anim": "Slash1", "anim_time": 0.9, "sword": true},
+	"slam": {"damage": 42.0, "startup": 0.42, "recovery": 0.7, "lunge": 2.0, "reach": 0.8, "radius": 2.6, "knockback": 12.0, "hitstop": 0.08, "shake": 0.55, "kind": "slam", "anim": "HeavyJumpAttack", "anim_time": 1.15, "sword": true, "shockwave": true},
 }
 const LIGHT_STRING := ["jab", "cross", "uppercut"]
 ## Heavy attack used after 0, 1 or 2 light hits.
 const HEAVY_AFTER := ["heavy", "rising", "slam"]
 
 @export var max_health := 100.0
+## Difficulty: every hit Rama takes is scaled by this (1.0 = full damage).
+@export var damage_taken_scale := 0.7
 @export var move_speed := 6.5
 @export var sneak_speed := 2.8
 @export var acceleration := 40.0
@@ -162,7 +164,7 @@ func _setup_model() -> void:
 	model.attach(_hip_sword, "Hips", Transform3D(Basis.from_euler(Vector3(deg_to_rad(115), 0, deg_to_rad(-12))), Vector3(0.2, 0.0, 0.05)))
 	for sword in [_hand_sword, _hip_sword]:
 		_add_sword_hilt(sword)
-	_set_sword_drawn(false)
+	_prewarm_sword()
 	(bow_mesh as MeshInstance3D).mesh = _build_bow_mesh()
 	model.attach(bow_mesh, "UpperChest", str_to_var(BACK))
 	model.attach($Visual/Body/Crown, "Head", Transform3D(Basis(), Vector3(0, 0.2, 0.0)))
@@ -253,6 +255,19 @@ func _add_sword_hilt(sword: Node3D) -> void:
 	handle.rotation.x = PI / 2.0
 	handle.position = Vector3(0, 0, 0.6)
 	sword.add_child(handle)
+
+
+## Show the drawn sword for a couple of frames at load (Rama is still
+## fading in), so its materials compile now instead of hitching on the first
+## sword attack.
+func _prewarm_sword() -> void:
+	_set_sword_drawn(true)
+	if _hip_sword:
+		_hip_sword.visible = true
+	for i in 3:
+		await get_tree().process_frame
+	if state != State.ATTACK and state != State.TAKEDOWN:
+		_set_sword_drawn(false)
 
 
 ## The sword is drawn only for sword moves and takedowns; otherwise sheathed.
@@ -454,6 +469,7 @@ func _state_takedown(_delta: float) -> void:
 		_takedown_struck = true
 		if is_instance_valid(_takedown_victim) and not _takedown_victim.is_dead():
 			_takedown_victim.take_damage(9999.0, global_position, 0.0, "takedown")
+			Sfx.play("sword_hit", _takedown_victim.aim_point(), 2.0)
 			FX.hit_spark(_takedown_victim.aim_point())
 		FX.hitstop(0.16)
 		FX.add_trauma(0.3)
@@ -467,6 +483,7 @@ func _state_astra(_delta: float) -> void:
 	if not _astra_fired and _state_time >= 0.55:
 		_astra_fired = true
 		FX.divine_blast(global_position, astra_radius)
+		Sfx.play("astra", global_position, 3.0, 0.0)
 		Combat.damage_in_radius(get_world_3d(), global_position + Vector3.UP, astra_radius,
 			Combat.LAYER_ENEMY | Combat.LAYER_WORLD, astra_damage, 12.0, "astra", [get_rid()])
 		FX.hitstop(0.2)
@@ -499,6 +516,7 @@ func _start_attack(attack_name: String) -> void:
 			facing = dir.normalized()
 	visual.rotation.y = Combat.yaw_for(facing)
 	_set_sword_drawn(bool(_attack["sword"]))
+	Sfx.play("sword_swing" if bool(_attack["sword"]) else "punch_swing", global_position)
 	_act(String(_attack["anim"]), float(_attack["anim_time"]), float(_attack["startup"]) + float(_attack["recovery"]))
 
 
@@ -512,20 +530,23 @@ func _do_hit() -> void:
 		if target.has_method("take_damage") and target.take_damage(float(_attack["damage"]), global_position, float(_attack["knockback"]), String(_attack["kind"])):
 			landed = true
 			FX.hit_spark(Combat.aim_point(target as Node3D))
+			Sfx.play("sword_hit" if bool(_attack["sword"]) else "punch", Combat.aim_point(target as Node3D))
 			if target.has_method("is_dead") and target.is_dead():
 				killed = true
 	var shockwave: bool = _attack.get("shockwave", false)
 	if shockwave:
 		FX.shockwave(global_position, float(_attack["radius"]))
+		Sfx.play("slam", global_position, -4.0)
 	if landed:
 		# A kill freezes a touch longer, to make it land.
-		FX.hitstop(float(_attack["hitstop"]) + (0.06 if killed else 0.0))
+		FX.hitstop(float(_attack["hitstop"]) + (0.03 if killed else 0.0))
 		FX.add_trauma(float(_attack["shake"]))
 	elif shockwave:
 		FX.add_trauma(float(_attack["shake"]) * 0.4)
 
 
 func _start_dodge() -> void:
+	Sfx.play("dodge", global_position)
 	_cancel_bow()
 	is_sneaking = false
 	state = State.DODGE
@@ -643,6 +664,7 @@ func _fire_arrow(charged: bool) -> void:
 		arrow.pierce = true
 	get_tree().current_scene.add_child(arrow)
 	arrow.launch(start, dir, self)
+	Sfx.play("bow_charged" if charged else "bow_release", start)
 	if charged:
 		FX.add_trauma(0.15)
 
@@ -678,6 +700,7 @@ func _throw_chakra() -> void:
 	get_tree().current_scene.add_child(chakra)
 	chakra.launch(self, start, target_point, homing)
 	chakra.caught.connect(func() -> void: chakra_ready = true)
+	Sfx.play("chakra", start)
 	_act("ThrowR", 0.55, 0.35)
 	# Quick throwing flick of the right arm.
 	_kill_pose_tween()
@@ -706,8 +729,10 @@ func add_astra(amount: float) -> void:
 func take_damage(amount: float, from_position: Vector3, knockback: float, _kind: String = "") -> bool:
 	if is_invulnerable():
 		return false
+	amount *= damage_taken_scale
 	health = maxf(health - amount, 0.0)
 	health_changed.emit(health, max_health)
+	Sfx.play("hurt", global_position, 0.0, 0.1)
 	FX.flash(visual, Color(1, 0.15, 0.1, 0.75), 0.12)
 	FX.add_trauma(0.45)
 	FX.hitstop(0.07)

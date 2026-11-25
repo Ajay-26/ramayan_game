@@ -111,6 +111,7 @@ func _hit_object(body: Object, at: Vector3) -> void:
 	var source := global_position - _dir * 0.5 if not _returning else global_position
 	if body.take_damage(damage, source, knockback, "chakra"):
 		FX.hit_spark(at)
+		Sfx.play("sword_hit", at, -3.0, 0.15)
 		FX.hitstop(0.03)
 	# Reached what it was hunting: turn for home.
 	if body == _target and not _returning:
