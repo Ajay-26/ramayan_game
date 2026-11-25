@@ -2,11 +2,11 @@
 
 A single-level, God of War–style action game prototype inspired by the Ramayana, made in **Godot 4.7** (Compatibility renderer, so it runs in the browser).
 
-Prince Rama protects Sage Vishwamitra's yagna through a forest at dusk — sneaking past sentries, fighting through a rakshasa war camp and a ravine of archers, claiming the divine chakra in a ruined shrine — and finally faces the demoness **Tataka**.
+Prince Rama protects Sage Vishwamitra's yagna through a forest on a stormy night — sneaking past sentries, fighting through a rakshasa war camp and a ravine of archers, claiming the divine chakra in a ruined shrine — and finally faces the demoness **Tataka**, who rides the storm: a long, five-stage boss fight on the ground and in the sky.
 
 ## Play
 
-Open the project in Godot 4.7 and press **F5** (starts at the main menu).
+Open the project in Godot 4.7 and press **F5** (starts at the main menu). **Fight Tataka** on the menu jumps straight to the boss.
 
 | Action | Keyboard / Mouse | Gamepad |
 |---|---|---|
@@ -25,8 +25,9 @@ Combos: **L L L**, **L H**, **L L H**, or **H** alone.
 
 - `scenes/` — levels, characters, enemies, props, UI
 - `scripts/` — gameplay code (player, enemies, combat, camera, world-building, UI)
-- `shaders/` — painterly foliage, bark, stone, rock, muscle-shaded skin, vignette
+- `shaders/` — painterly foliage, bark, stone, rock, muscle-shaded skin, storm sky and clouds, full-screen cinematic grade
 - `tools/build_level.py` — generates the level scene and props; then bake navigation with `tools/bake_navmesh.tscn`
+- `tools/make_sounds.py` — synthesizes every sound effect, ambience loop and music track into `assets/audio/` (`python3 tools/make_sounds.py`); `scripts/autoload/sfx.gd` plays them
 - `tests/` — headless tests (see below)
 - `DESIGN.md` — design doc; `CREDITS.md` — third-party assets
 
@@ -36,7 +37,10 @@ Combos: **L L L**, **L H**, **L L H**, or **H** alone.
 Godot --headless --path . res://tests/level_test.tscn
 Godot --headless --path . res://tests/player_moves_test.tscn
 Godot --headless --path . res://tests/camera_test.tscn
+Godot --headless --path . res://tests/tataka_test.tscn
 ```
+
+Dev tools (need a window): `tools/screenshot.tscn` saves screenshots at checkpoints (`-- <dir> 0 3 6 6:4`; `6:4` = Tataka fight at stage 4), and `tools/perf_probe.tscn` prints frame times with each visual effect switched off.
 
 ## Build
 

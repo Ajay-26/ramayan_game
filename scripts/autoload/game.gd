@@ -15,6 +15,8 @@ const CHECKPOINT_BOSS := 6
 var checkpoint := 0
 var has_chakra := false
 var deaths := 0
+## Tataka stage reached (only used when the boss fight has stage checkpoints).
+var boss_stage := 0
 ## Which set of cards the story scene shows: "intro" or "outro".
 var story := "intro"
 
@@ -23,7 +25,16 @@ func new_game() -> void:
 	checkpoint = 0
 	has_chakra = false
 	deaths = 0
+	boss_stage = 0
 	show_story("intro")
+
+
+## Straight to the Tataka fight (from the main menu), with the chakra.
+func fight_boss() -> void:
+	checkpoint = CHECKPOINT_BOSS
+	has_chakra = true
+	boss_stage = 0
+	goto(LEVEL)
 
 
 func continue_game() -> void:
@@ -56,6 +67,9 @@ func finish_level() -> void:
 
 
 func goto(path: String) -> void:
+	Sfx.stop_loops(0.5)
+	if path != LEVEL:
+		Sfx.music("music_calm", 1.5)
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	get_tree().paused = false
 	Engine.time_scale = 1.0

@@ -6,7 +6,10 @@ shader_type spatial;
 
 uniform vec4 skin_color : source_color = vec4(0.9, 0.75, 0.68, 1.0);
 uniform float definition : hint_range(0.0, 2.0) = 1.4;
-uniform float roughness_value : hint_range(0.0, 1.0) = 0.55;
+uniform float roughness_value : hint_range(0.0, 1.0) = 0.5;
+// Silhouette rim light, matching the other body materials.
+uniform float rim_amount : hint_range(0.0, 1.0) = 0.55;
+uniform float rim_tint_amount : hint_range(0.0, 1.0) = 0.35;
 
 varying vec3 model_pos;
 varying vec3 model_normal;
@@ -61,4 +64,6 @@ void fragment() {
 
 	ALBEDO = skin_color.rgb * (1.0 + shade * definition);
 	ROUGHNESS = roughness_value;
+	RIM = rim_amount;
+	RIM_TINT = rim_tint_amount;
 }

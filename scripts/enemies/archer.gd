@@ -118,6 +118,7 @@ func _shoot() -> void:
 	arrow.mask = Combat.LAYER_WORLD | Combat.LAYER_PLAYER
 	get_tree().current_scene.add_child(arrow)
 	arrow.launch(start, target - start, self)
+	Sfx.play("bow_release", start, -3.0)
 	_shot_cooldown = randf_range(shot_interval_min, shot_interval_max)
 
 

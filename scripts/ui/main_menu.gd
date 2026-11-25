@@ -1,5 +1,5 @@
 extends Control
-## Title screen: Begin / Continue / Controls / Quit.
+## Title screen: Begin / Continue / Fight Tataka / Controls / Quit.
 
 const GOLD := Color(1.0, 0.78, 0.3)
 
@@ -12,6 +12,7 @@ var _time := 0.0
 func _ready() -> void:
 	set_anchors_preset(Control.PRESET_FULL_RECT)
 	_build()
+	Sfx.music("music_calm")
 
 
 func _process(delta: float) -> void:
@@ -67,6 +68,7 @@ void fragment() {
 	if Game.has_progress():
 		_buttons.add_child(_button("Continue", Game.continue_game))
 	_buttons.add_child(_button("Begin", Game.new_game))
+	_buttons.add_child(_button("Fight Tataka", Game.fight_boss))
 	_buttons.add_child(_button("Controls", _toggle_controls))
 	if not OS.has_feature("web"):
 		_buttons.add_child(_button("Quit", get_tree().quit))
@@ -138,6 +140,7 @@ func _button(text: String, on_press: Callable) -> Button:
 	button.custom_minimum_size = Vector2(260, 48)
 	button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
 	button.add_theme_font_size_override("font_size", 22)
+	button.pressed.connect(func() -> void: Sfx.play("ui_click"))
 	button.pressed.connect(on_press)
 	return button
 

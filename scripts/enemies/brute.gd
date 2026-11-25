@@ -139,6 +139,7 @@ func _slam() -> void:
 	var target := current_target()
 	if target_is_objective(target) and global_position.distance_to(target.global_position) < 3.6:
 		target.take_damage(damage, global_position, 0.0, "melee")
+	Sfx.play("slam", center)
 	Combat.damage_in_radius(get_world_3d(), center + Vector3.UP, slam_radius, Combat.LAYER_PLAYER, damage, 11.0, "melee", [get_rid()])
 
 

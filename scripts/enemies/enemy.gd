@@ -114,6 +114,7 @@ func take_damage(amount: float, from_position: Vector3, knockback: float, kind: 
 	if _player:
 		_player.add_astra(amount * astra_per_damage)
 	FX.flash(visual, Color(1, 1, 1, 0.85), 0.08)
+	Sfx.play("enemy_hit", aim_point(), -6.0)
 	if not aware:
 		become_aware()
 	if health <= 0.0:
@@ -164,6 +165,7 @@ func die(kind: String = "") -> void:
 
 func _death_effect(_kind: String) -> void:
 	FX.ash_burst(aim_point())
+	Sfx.play("ash", aim_point())
 	var tween := create_tween().set_process_mode(Tween.TWEEN_PROCESS_PHYSICS)
 	tween.tween_property(visual, "scale", Vector3(1.25, 0.15, 1.25), 0.1)
 	tween.tween_callback(queue_free)
@@ -177,6 +179,7 @@ func become_aware(propagate: bool = true) -> void:
 	aware = true
 	_suspicion = 0.0
 	_show_label("!", Color(1, 0.3, 0.1), true)
+	Sfx.play("growl", aim_point(), -2.0, 0.15)
 	alerted.emit(self)
 	if propagate:
 		# Shout to nearby friends.

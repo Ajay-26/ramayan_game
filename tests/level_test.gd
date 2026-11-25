@@ -227,16 +227,34 @@ func _test_yagna_and_boss() -> void:
 	_check(tataka.visible and tataka.is_in_group("enemies"), "Tataka enters the arena")
 	_check(level.get_node("HUD")._boss_box.visible, "boss health bar shows")
 	await _wait(2.0)
-	# Knock her into phase 2 and 3.
-	tataka.take_damage(tataka.max_health * 0.4, tataka.global_position + Vector3.BACK * 3.0, 0.0, "heavy")
-	_check(tataka.phase == 2, "phase 2 at 60% health")
-	await _wait(2.0)
-	tataka.take_damage(tataka.max_health * 0.3, tataka.global_position + Vector3.BACK * 3.0, 0.0, "heavy")
-	_check(tataka.phase == 3, "phase 3 at 30% health")
-	await _wait(2.0)
+	# Burst damage can't skip a stage: each big hit stops at the next line.
+	tataka.take_damage(tataka.max_health * 0.9, tataka.global_position + Vector3.BACK * 3.0, 0.0, "heavy")
+	_check(is_equal_approx(tataka.health, tataka.stage_floor(1)), "a huge hit stops at the stage line")
+	for i in 40:
+		await _wait(0.1)
+		if tataka.stage == 2:
+			break
+	_check(tataka.stage == 2, "stage 2 at 80% health")
+	for i in 40:
+		await _wait(0.1)
+		if tataka.airborne and tataka.state == Tataka.State.HOVER:
+			break
+	_check(tataka.airborne, "she takes to the sky in stage 2")
+	for next in [3, 4, 5]:
+		await _force_stage(tataka, next)
+		_check(tataka.stage == next, "stage %d reached" % next)
+	await _force_stage(tataka, 6)
+	for i in 60:
+		await _wait(0.1)
+		if tataka.state == Tataka.State.FINISHER:
+			break
+	_check(tataka.state == Tataka.State.FINISHER and not tataka.is_dead(), "at zero she waits for the final blow")
+	player.teleport(tataka.global_position + Vector3(0, 0, 3.0), Vector3.FORWARD)
+	await _wait(0.2)
+	_check(player.takedown_candidate == tataka, "final blow offered")
 	var defeated := [false]
 	section.get_node("Boss").defeated.connect(func() -> void: defeated[0] = true)
-	tataka.take_damage(tataka.max_health, tataka.global_position + Vector3.BACK * 3.0, 0.0, "heavy")
+	await _tap("attack_light")
 	for i in 40:
 		await _wait(0.1)
 		if defeated[0]:
@@ -245,6 +263,18 @@ func _test_yagna_and_boss() -> void:
 
 
 # --- Helpers ----------------------------------------------------------------
+
+## Damage Tataka (whenever she can be hit) until she reaches `stage`.
+func _force_stage(tataka: Tataka, stage: int) -> void:
+	for i in 300:
+		if tataka.stage >= stage or tataka.state == Tataka.State.FINISHER:
+			return
+		if tataka._accepts_damage("arrow", tataka.global_position):
+			tataka.take_damage(tataka.max_health, tataka.global_position + Vector3.BACK * 3.0, 0.0, "arrow")
+		elif tataka.hidden:
+			tataka._reveal_cooldown = 0.0
+		await _wait(0.1)
+
 
 func _load(checkpoint: int) -> void:
 	if level:

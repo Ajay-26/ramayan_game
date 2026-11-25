@@ -31,6 +31,7 @@ func _ready() -> void:
 	player.teleport(spawn.global_position, -spawn.global_basis.z)
 	rig.snap()
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED  # mouse steers the camera
+	Sfx.music("music_calm")
 	player.died.connect(_on_player_died)
 
 	var yagna_section := sections[YAGNA_SECTION]

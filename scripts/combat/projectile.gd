@@ -76,8 +76,10 @@ func _physics_process(delta: float) -> void:
 			landed = collider.take_damage(damage, source_pos, knockback, kind)
 		if landed:
 			FX.hit_spark(hit_pos)
+			Sfx.play("arrow_hit", hit_pos)
 		else:
 			FX.dust(hit_pos)
+			Sfx.play("arrow_thunk", hit_pos, -4.0)
 		if landed and from_player:
 			FX.hitstop(0.04 if not pierce else 0.08)
 		if pierce and collider is CharacterBody3D:
